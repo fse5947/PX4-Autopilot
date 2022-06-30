@@ -176,10 +176,14 @@ void TECS::_update_speed_setpoint()
 
 void TECS::runAltitudeControllerSmoothVelocity(float alt_sp_amsl_m, float target_climbrate_m_s,
 		float target_sinkrate_m_s,
-		float alt_amsl)
+		float alt_amsl, float soar_en)
 {
 	target_climbrate_m_s = math::min(target_climbrate_m_s, _max_climb_rate);
 	target_sinkrate_m_s = math::min(target_sinkrate_m_s, _max_sink_rate);
+
+	if (soar_en >= 1.0f) {
+		alt_sp_amsl_m = alt_amsl;
+	}
 
 	const float delta_trajectory_to_target_m = alt_sp_amsl_m - _alt_control_traj_generator.getCurrentPosition();
 
@@ -453,7 +457,7 @@ void TECS::_updateTrajectoryGenerationConstraints()
 }
 
 void TECS::_calculateHeightRateSetpoint(float altitude_sp_amsl, float height_rate_sp, float target_climbrate,
-					float target_sinkrate, float altitude_amsl)
+					float target_sinkrate, float altitude_amsl, float soar_en)
 {
 	bool control_altitude = true;
 	const bool input_is_height_rate = PX4_ISFINITE(height_rate_sp);
@@ -473,7 +477,7 @@ void TECS::_calculateHeightRateSetpoint(float altitude_sp_amsl, float height_rat
 
 
 	if (control_altitude) {
-		runAltitudeControllerSmoothVelocity(altitude_sp_amsl, target_climbrate, target_sinkrate, altitude_amsl);
+		runAltitudeControllerSmoothVelocity(altitude_sp_amsl, target_climbrate, target_sinkrate, altitude_amsl, soar_en);
 
 	} else {
 		_alt_control_traj_generator.setCurrentVelocity(_hgt_rate_setpoint);
@@ -554,7 +558,7 @@ void TECS::_update_STE_rate_lim()
 void TECS::update_pitch_throttle(float pitch, float baro_altitude, float hgt_setpoint,
 				 float EAS_setpoint, float equivalent_airspeed, float eas_to_tas, bool climb_out_setpoint, float pitch_min_climbout,
 				 float throttle_min, float throttle_max, float throttle_cruise, float pitch_limit_min, float pitch_limit_max,
-				 float target_climbrate, float target_sinkrate, float hgt_rate_sp)
+				 float target_climbrate, float target_sinkrate, float hgt_rate_sp, float soar_en)
 {
 	// Calculate the time since last update (seconds)
 	uint64_t now = hrt_absolute_time();
@@ -594,7 +598,7 @@ void TECS::update_pitch_throttle(float pitch, float baro_altitude, float hgt_set
 	// Calculate the demanded true airspeed
 	_update_speed_setpoint();
 
-	_calculateHeightRateSetpoint(hgt_setpoint, hgt_rate_sp, target_climbrate, target_sinkrate, baro_altitude);
+	_calculateHeightRateSetpoint(hgt_setpoint, hgt_rate_sp, target_climbrate, target_sinkrate, baro_altitude, soar_en);
 
 	// Calculate the specific energy values required by the control loop
 	_update_energy_estimates();
@@ -640,5 +644,5 @@ void TECS::_update_speed_height_weights()
 	// don't allow any weight to be larger than one, as it has the same effect as reducing the control
 	// loop time constant and therefore can lead to a destabilization of that control loop
 	_SPE_weighting = constrain(2.0f - _SKE_weighting, 0.f, 1.f);
-	_SKE_weighting = constrain(_SKE_weighting, 0.f, 1.f);
+	// _SKE_weighting = constrain(_SKE_weighting, 0.f, 1.f);
 }
