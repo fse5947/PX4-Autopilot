@@ -35,6 +35,7 @@ px4_add_romfs_files(
 	AAERTWF.main.mix
 	AAVVTWFF.main.mix
 	AAVVTWFF_vtail.main.mix
+	AAVVTFF_magellan.main.mix
 	AERT.main.mix
 	AETRFG.main.mix
 	babyshark.main.mix
