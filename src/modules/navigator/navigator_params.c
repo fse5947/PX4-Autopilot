@@ -198,3 +198,16 @@ PARAM_DEFINE_FLOAT(NAV_AH_ALT, 600.0f);
  * @group Mission
  */
 PARAM_DEFINE_INT32(NAV_FORCE_VT, 1);
+
+/**
+ * Soaring Enabled
+ *
+ * This parameter allows us to enable gliding flight in any auto mode
+ *
+ * @min 0.0
+ * @max 2.0
+ * @decimal 1
+ * @increment 1.0
+ * @group FW TECS
+ */
+PARAM_DEFINE_FLOAT(NAV_FW_SOAR_EN, 0.0f);

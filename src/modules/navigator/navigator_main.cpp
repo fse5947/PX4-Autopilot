@@ -985,6 +985,11 @@ float Navigator::get_default_acceptance_radius()
 	return _param_nav_acc_rad.get();
 }
 
+float Navigator::get_nav_fw_soaring()
+{
+	return _param_nav_fw_soar_en.get();
+}
+
 float Navigator::get_default_altitude_acceptance_radius()
 {
 	if (get_vstatus()->vehicle_type == vehicle_status_s::VEHICLE_TYPE_FIXED_WING) {
