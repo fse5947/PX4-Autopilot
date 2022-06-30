@@ -434,7 +434,7 @@ private:
 	void tecs_update_pitch_throttle(const hrt_abstime &now, float alt_sp, float airspeed_sp,
 					float pitch_min_rad, float pitch_max_rad,
 					float throttle_min, float throttle_max, float throttle_cruise,
-					bool climbout_mode, float climbout_pitch_min_rad,
+					bool climbout_mode, float climbout_pitch_min_rad, float soar_en = 0.0f,
 					bool disable_underspeed_detection = false, float hgt_rate_sp = NAN);
 
 	DEFINE_PARAMETERS(
@@ -525,7 +525,9 @@ private:
 
 		(ParamFloat<px4::params::FW_TKO_PITCH_MIN>) _takeoff_pitch_min,
 
-		(ParamFloat<px4::params::NAV_FW_ALT_RAD>) _param_nav_fw_alt_rad
+		(ParamFloat<px4::params::NAV_FW_ALT_RAD>) _param_nav_fw_alt_rad,
+
+		(ParamFloat<px4::params::NAV_FW_SOAR_EN>) _param_nav_fw_soar_en
 
 	)
 
