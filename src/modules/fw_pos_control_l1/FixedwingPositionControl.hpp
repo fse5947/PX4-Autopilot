@@ -206,6 +206,10 @@ private:
 
 	bool _landed{true};
 
+	/* Soaring */
+	bool soar_enable{false};
+	bool soar_climbout{false};
+
 	/* Landing */
 	bool _land_noreturn_horizontal{false};
 	bool _land_noreturn_vertical{false};

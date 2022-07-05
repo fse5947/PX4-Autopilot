@@ -1065,7 +1065,7 @@ FixedwingPositionControl::handle_setpoint_type(const uint8_t setpoint_type, cons
 					   &dist_xy, &dist_z);
 
 		float loiter_radius_abs = fabsf(_param_nav_loiter_rad.get());
-		float soar_enable = _param_nav_fw_soar_en.get();
+		soar_enable = _param_nav_fw_soar_en.get() >= 1.0f;
 
 		if (fabsf(pos_sp_curr.loiter_radius) > FLT_EPSILON) {
 			loiter_radius_abs = fabsf(pos_sp_curr.loiter_radius);
@@ -1075,7 +1075,7 @@ FixedwingPositionControl::handle_setpoint_type(const uint8_t setpoint_type, cons
 			// POSITION: achieve position setpoint altitude via loiter
 			// close to waypoint, but altitude error greater than twice acceptance
 			if ((!_vehicle_status.in_transition_mode) && (dist >= 0.f)
-			    && ((dist_z > _param_nav_fw_alt_rad.get()) && soar_enable < 1.0f)
+			    && ((dist_z > _param_nav_fw_alt_rad.get()) && !soar_enable)
 			    && (dist_xy < 2.f * math::max(acc_rad, loiter_radius_abs))) {
 				// SETPOINT_TYPE_POSITION -> SETPOINT_TYPE_LOITER
 				position_sp_type = position_setpoint_s::SETPOINT_TYPE_LOITER;
@@ -1125,14 +1125,29 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 	float tecs_fw_mission_throttle;
 
 	float mission_throttle = _param_fw_thr_cruise.get();
-	float soar_enable = _param_nav_fw_soar_en.get();
+
+	if (_param_nav_fw_soar_en.get() >= 1.0f) {
+		if (-_local_pos.z <= 50.0f || (soar_climbout && -_local_pos.z <= 150.0f)) {
+			if (!soar_climbout) {
+				_soar_climbout_wp_local = Vector2f{_local_pos.x, _local_pos.y};
+			}
+			soar_enable = false;
+			soar_climbout = true;
+		} else {
+			soar_enable = true;
+			soar_climbout = false;
+		}
+	} else {
+		soar_enable = false;
+		soar_climbout = false;
+	}
 
 	if (PX4_ISFINITE(pos_sp_curr.cruising_throttle) &&
 	    pos_sp_curr.cruising_throttle >= 0.0f) {
 		mission_throttle = pos_sp_curr.cruising_throttle;
 	}
 
-	if (mission_throttle < _param_fw_thr_min.get() || soar_enable > 0.0f) {
+	if (mission_throttle < _param_fw_thr_min.get() || (soar_enable && !soar_climbout)) {
 		/* enable gliding with this waypoint */
 		_tecs.set_speed_weight(2.0f);
 		tecs_fw_thr_min = 0.0;
@@ -1233,14 +1248,26 @@ FixedwingPositionControl::control_auto_velocity(const hrt_abstime &now, const fl
 	float tecs_fw_mission_throttle;
 
 	float mission_throttle = _param_fw_thr_cruise.get();
-	float soar_enable = _param_nav_fw_soar_en.get();
+
+	if (_param_nav_fw_soar_en.get() >= 1.0f) {
+		if (-_local_pos.z <= 50.0f || (soar_climbout && -_local_pos.z <= 150.0f)) {
+			soar_enable = false;
+			soar_climbout = true;
+		} else {
+			soar_enable = true;
+			soar_climbout = false;
+		}
+	} else {
+		soar_enable = false;
+		soar_climbout = false;
+	}
 
 	if (PX4_ISFINITE(pos_sp_curr.cruising_throttle) &&
 	    pos_sp_curr.cruising_throttle >= 0.0f) {
 		mission_throttle = pos_sp_curr.cruising_throttle;
 	}
 
-	if (mission_throttle < _param_fw_thr_min.get() || soar_enable > 0.0f) {
+	if (mission_throttle < _param_fw_thr_min.get() || (soar_enable && !soar_climbout)) {
 		/* enable gliding with this waypoint */
 		_tecs.set_speed_weight(2.0f);
 		tecs_fw_thr_min = 0.0;
@@ -1330,14 +1357,26 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 	float tecs_fw_mission_throttle;
 
 	float mission_throttle = _param_fw_thr_cruise.get();
-	float soar_enable = _param_nav_fw_soar_en.get();
+
+	if (_param_nav_fw_soar_en.get() >= 1.0f) {
+		if (-_local_pos.z <= 50.0f || (soar_climbout && -_local_pos.z <= 150.0f)) {
+			soar_enable = false;
+			soar_climbout = true;
+		} else {
+			soar_enable = true;
+			soar_climbout = false;
+		}
+	} else {
+		soar_enable = false;
+		soar_climbout = false;
+	}
 
 	if (PX4_ISFINITE(pos_sp_curr.cruising_throttle) &&
 	    pos_sp_curr.cruising_throttle >= 0.0f) {
 		mission_throttle = pos_sp_curr.cruising_throttle;
 	}
 
-	if (mission_throttle < _param_fw_thr_min.get() || soar_enable > 0.0f) {
+	if (mission_throttle < _param_fw_thr_min.get() || (soar_enable && !soar_climbout)) {
 		/* enable gliding with this waypoint */
 		_tecs.set_speed_weight(2.0f);
 		tecs_fw_thr_min = 0.0;
