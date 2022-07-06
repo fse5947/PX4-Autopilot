@@ -209,6 +209,9 @@ private:
 	/* Soaring */
 	bool soar_enable{false};
 	bool soar_climbout{false};
+	float soar_min_alt{25.0f};
+	float climbout_alt{150.0f};
+	Vector2f _soar_climbout_wp_local {};
 
 	/* Landing */
 	bool _land_noreturn_horizontal{false};
@@ -438,7 +441,7 @@ private:
 	void tecs_update_pitch_throttle(const hrt_abstime &now, float alt_sp, float airspeed_sp,
 					float pitch_min_rad, float pitch_max_rad,
 					float throttle_min, float throttle_max, float throttle_cruise,
-					bool climbout_mode, float climbout_pitch_min_rad, float soar_en = 0.0f,
+					bool climbout_mode, float climbout_pitch_min_rad, bool soar_en = false,
 					bool disable_underspeed_detection = false, float hgt_rate_sp = NAN);
 
 	DEFINE_PARAMETERS(
@@ -531,7 +534,11 @@ private:
 
 		(ParamFloat<px4::params::NAV_FW_ALT_RAD>) _param_nav_fw_alt_rad,
 
-		(ParamFloat<px4::params::NAV_FW_SOAR_EN>) _param_nav_fw_soar_en
+		(ParamFloat<px4::params::NAV_FW_SOAR_EN>) _param_nav_fw_soar_en,
+
+		(ParamFloat<px4::params::NAV_FW_SOAR_MIN>) _param_nav_fw_soar_min,
+
+		(ParamFloat<px4::params::NAV_FW_SOAR_CLB>) _param_nav_fw_soar_climb
 
 	)
 
