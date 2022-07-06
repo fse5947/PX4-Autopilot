@@ -91,7 +91,7 @@ public:
 				   float EAS_setpoint, float equivalent_airspeed, float eas_to_tas, bool climb_out_setpoint, float pitch_min_climbout,
 				   float throttle_min, float throttle_setpoint_max, float throttle_cruise,
 				   float pitch_limit_min, float pitch_limit_max, float target_climbrate, float target_sinkrate, float hgt_rate_sp = NAN,
-				   float soar_en = 0.0f);
+				   bool soar_en = false);
 
 	float get_throttle_setpoint() { return _last_throttle_setpoint; }
 	float get_pitch_setpoint() { return _last_pitch_setpoint; }
@@ -323,7 +323,7 @@ private:
 	 * Calculate desired height rate from altitude demand
 	 */
 	void runAltitudeControllerSmoothVelocity(float alt_sp_amsl_m, float target_climbrate_m_s, float target_sinkrate_m_s,
-			float alt_amsl, float soar_en);
+			float alt_amsl, bool soar_enabled);
 
 	/**
 	 * Detect if the system is not capable of maintaining airspeed
@@ -353,7 +353,7 @@ private:
 	void _updateTrajectoryGenerationConstraints();
 
 	void _calculateHeightRateSetpoint(float altitude_sp_amsl, float height_rate_sp, float target_climbrate,
-					  float target_sinkrate, float altitude_amsl, float soar_en);
+					  float target_sinkrate, float altitude_amsl, bool soar_enabled);
 
 	/**
 	 * Initialize the controller

@@ -176,12 +176,12 @@ void TECS::_update_speed_setpoint()
 
 void TECS::runAltitudeControllerSmoothVelocity(float alt_sp_amsl_m, float target_climbrate_m_s,
 		float target_sinkrate_m_s,
-		float alt_amsl, float soar_en)
+		float alt_amsl, bool soar_enabled)
 {
 	target_climbrate_m_s = math::min(target_climbrate_m_s, _max_climb_rate);
 	target_sinkrate_m_s = math::min(target_sinkrate_m_s, _max_sink_rate);
 
-	if (soar_en >= 1.0f) {
+	if (soar_enabled) {
 		alt_sp_amsl_m = alt_amsl;
 	}
 
@@ -457,7 +457,7 @@ void TECS::_updateTrajectoryGenerationConstraints()
 }
 
 void TECS::_calculateHeightRateSetpoint(float altitude_sp_amsl, float height_rate_sp, float target_climbrate,
-					float target_sinkrate, float altitude_amsl, float soar_en)
+					float target_sinkrate, float altitude_amsl, bool soar_enabled)
 {
 	bool control_altitude = true;
 	const bool input_is_height_rate = PX4_ISFINITE(height_rate_sp);
@@ -477,7 +477,7 @@ void TECS::_calculateHeightRateSetpoint(float altitude_sp_amsl, float height_rat
 
 
 	if (control_altitude) {
-		runAltitudeControllerSmoothVelocity(altitude_sp_amsl, target_climbrate, target_sinkrate, altitude_amsl, soar_en);
+		runAltitudeControllerSmoothVelocity(altitude_sp_amsl, target_climbrate, target_sinkrate, altitude_amsl, soar_enabled);
 
 	} else {
 		_alt_control_traj_generator.setCurrentVelocity(_hgt_rate_setpoint);
@@ -558,7 +558,7 @@ void TECS::_update_STE_rate_lim()
 void TECS::update_pitch_throttle(float pitch, float baro_altitude, float hgt_setpoint,
 				 float EAS_setpoint, float equivalent_airspeed, float eas_to_tas, bool climb_out_setpoint, float pitch_min_climbout,
 				 float throttle_min, float throttle_max, float throttle_cruise, float pitch_limit_min, float pitch_limit_max,
-				 float target_climbrate, float target_sinkrate, float hgt_rate_sp, float soar_en)
+				 float target_climbrate, float target_sinkrate, float hgt_rate_sp, bool soar_en)
 {
 	// Calculate the time since last update (seconds)
 	uint64_t now = hrt_absolute_time();
