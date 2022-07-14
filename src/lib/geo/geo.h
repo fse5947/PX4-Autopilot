@@ -270,4 +270,18 @@ public:
 	 * @param lon in degrees (8.1234567°, not 81234567°)
 	 */
 	void reproject(float x, float y, double &lat, double &lon) const;
+
+	/**
+	 * Transform a point in the geographic coordinate system to the local
+	 * azimuthal equidistant plane using the projection
+	 * @param lat in degrees (47.1234567°, not 471234567°)
+	 * @param lon in degrees (8.1234567°, not 81234567°)
+	 * @return the point in local coordinates as north / east
+	 */
+	inline matrix::Vector2d reproject(float x, float y) const
+	{
+		matrix::Vector2d res;
+		reproject(x, y, res(0), res(1));
+		return res;
+	}
 };
