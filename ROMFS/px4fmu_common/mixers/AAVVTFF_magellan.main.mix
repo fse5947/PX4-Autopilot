@@ -30,10 +30,10 @@ Aileron mixer (roll + Airbrakes)
 This mixer assumes that the aileron servos are set up mechanically reversed.
 
 M: 1
-S: 0 0 15000  11500   -5200 -10000  10000
+S: 0 0 10000  10000   -5200 -10000  10000
 
 M: 1
-S: 0 0 -5000  -5000   600 -10000  10000
+S: 0 0 -7000  -3000   600 -10000  10000
 
 V-tail mixers
 -------------
