@@ -212,6 +212,7 @@ private:
 	float soar_min_alt{25.0f};
 	float climbout_alt{150.0f};
 	Vector2f _soar_climbout_wp_local {};
+	Vector2d _soar_climbout_wp {};
 
 	/* Landing */
 	bool _land_noreturn_horizontal{false};

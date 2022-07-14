@@ -1065,7 +1065,12 @@ FixedwingPositionControl::handle_setpoint_type(const uint8_t setpoint_type, cons
 					   &dist_xy, &dist_z);
 
 		float loiter_radius_abs = fabsf(_param_nav_loiter_rad.get());
-		soar_enable = _param_nav_fw_soar_en.get() >= 1.0f;
+
+		float param_soar = _param_nav_fw_soar_en.get();
+
+		if (climbout_alt <= soar_min_alt) {
+			param_soar = 0.0f;
+		}
 
 		if (fabsf(pos_sp_curr.loiter_radius) > FLT_EPSILON) {
 			loiter_radius_abs = fabsf(pos_sp_curr.loiter_radius);
@@ -1075,7 +1080,7 @@ FixedwingPositionControl::handle_setpoint_type(const uint8_t setpoint_type, cons
 			// POSITION: achieve position setpoint altitude via loiter
 			// close to waypoint, but altitude error greater than twice acceptance
 			if ((!_vehicle_status.in_transition_mode) && (dist >= 0.f)
-			    && ((dist_z > _param_nav_fw_alt_rad.get()) && !soar_enable)
+			    && ((dist_z > _param_nav_fw_alt_rad.get()) && param_soar < 1.0f)
 			    && (dist_xy < 2.f * math::max(acc_rad, loiter_radius_abs))) {
 				// SETPOINT_TYPE_POSITION -> SETPOINT_TYPE_LOITER
 				position_sp_type = position_setpoint_s::SETPOINT_TYPE_LOITER;
@@ -1141,6 +1146,7 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 		if (-_local_pos.z <= soar_min_alt || (soar_climbout && -_local_pos.z <= climbout_alt)) {
 			if (!soar_climbout) {
 				_soar_climbout_wp_local = Vector2f{_local_pos.x, _local_pos.y};
+				// _soar_climbout_wp = _global_local_proj_ref.reproject(_local_pos.x, _local_pos.y);
 			}
 			soar_enable = false;
 			soar_climbout = true;
@@ -1170,6 +1176,7 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 		tecs_fw_mission_throttle = 0.0;
 
 	} else {
+		_tecs.set_speed_weight(1.0f);
 		tecs_fw_thr_min = _param_fw_thr_min.get();
 		tecs_fw_thr_max = _param_fw_thr_max.get();
 		tecs_fw_mission_throttle = mission_throttle;
@@ -1179,13 +1186,13 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 	float position_sp_alt = pos_sp_curr.alt;
 
 	if (soar_climbout){
-		position_sp_alt = climbout_alt;
+		position_sp_alt = climbout_alt + _local_pos.ref_alt;
 	}
 
 	// Altitude first order hold (FOH)
 	if (pos_sp_prev.valid && PX4_ISFINITE(pos_sp_prev.alt) &&
 	    ((pos_sp_prev.type == position_setpoint_s::SETPOINT_TYPE_POSITION) ||
-	     (pos_sp_prev.type == position_setpoint_s::SETPOINT_TYPE_LOITER))
+	     (pos_sp_prev.type == position_setpoint_s::SETPOINT_TYPE_LOITER)) && !soar_climbout
 	   ) {
 		const float d_curr_prev = get_distance_to_next_waypoint((double)curr_wp(0), (double)curr_wp(1),
 					  pos_sp_prev.lat, pos_sp_prev.lon);
@@ -1274,7 +1281,13 @@ FixedwingPositionControl::control_auto_velocity(const hrt_abstime &now, const fl
 	soar_min_alt = _param_nav_fw_soar_min.get();
 	climbout_alt = _param_nav_fw_soar_climb.get();
 
-	if (_param_nav_fw_soar_en.get() >= 1.0f) {
+	float param_soar = _param_nav_fw_soar_en.get();
+
+	if (climbout_alt <= soar_min_alt) {
+		param_soar = 0.0f;
+	}
+
+	if (param_soar >= 1.0f) {
 		if (-_local_pos.z <= soar_min_alt || (soar_climbout && -_local_pos.z <= climbout_alt)) {
 			if (!soar_climbout) {
 				_soar_climbout_wp_local = Vector2f{_local_pos.x, _local_pos.y};
@@ -1307,6 +1320,7 @@ FixedwingPositionControl::control_auto_velocity(const hrt_abstime &now, const fl
 		tecs_fw_mission_throttle = 0.0;
 
 	} else {
+		_tecs.set_speed_weight(1.0f);
 		tecs_fw_thr_min = _param_fw_thr_min.get();
 		tecs_fw_thr_max = _param_fw_thr_max.get();
 		tecs_fw_mission_throttle = mission_throttle;
@@ -1316,7 +1330,7 @@ FixedwingPositionControl::control_auto_velocity(const hrt_abstime &now, const fl
 	float position_sp_alt = pos_sp_curr.alt;
 
 	if (soar_climbout){
-		position_sp_alt = climbout_alt;
+		position_sp_alt = climbout_alt + _local_pos.ref_alt;
 	}
 
 	//Offboard velocity control
@@ -1396,7 +1410,13 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 	soar_min_alt = _param_nav_fw_soar_min.get();
 	climbout_alt = _param_nav_fw_soar_climb.get();
 
-	if (_param_nav_fw_soar_en.get() >= 1.0f) {
+	float param_soar = _param_nav_fw_soar_en.get();
+
+	if (climbout_alt <= soar_min_alt || (pos_sp_next.type == position_setpoint_s::SETPOINT_TYPE_LAND && pos_sp_next.valid)) {
+		param_soar = 0.0f;
+	}
+
+	if (param_soar >= 1.0f) {
 		if (-_local_pos.z <= soar_min_alt || (soar_climbout && -_local_pos.z <= climbout_alt)) {
 			soar_enable = false;
 			soar_climbout = true;
@@ -1422,6 +1442,7 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 		tecs_fw_mission_throttle = 0.0;
 
 	} else {
+		_tecs.set_speed_weight(1.0f);
 		tecs_fw_thr_min = _param_fw_thr_min.get();
 		tecs_fw_thr_max = _param_fw_thr_max.get();
 		tecs_fw_mission_throttle = mission_throttle;
@@ -1475,7 +1496,7 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 	float alt_sp = pos_sp_curr.alt;
 
 	if (soar_climbout){
-		alt_sp = climbout_alt;
+		alt_sp = climbout_alt + _local_pos.ref_alt;
 	}
 
 	if (in_takeoff_situation()) {
