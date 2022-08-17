@@ -11,6 +11,8 @@ O:       10000   10000   0 -10000  10000
 S: 0 2   10000   10000    0 -10000  10000
 
 # mixer for the pusher/puller throttle
+# NOTE: for HITL the throttle needs to be on the 3rd position see:
+# src/modules/mavlink/streams/HIL_ACTUATOR_CONTROLS.hpp::send() line 151
 M: 1
 O:      10000  10000      0 -10000  10000
 S: 0 3      0  20000 -10000 -10000  10000
