@@ -51,12 +51,11 @@ param set-default CA_SV_CS2_TRQ_Y 1.0
 param set-default CA_SV_CS2_TYPE 4
 param set-default CA_SV_CS3_TYPE 10
 
-param set-default HIL_ACT_REV 2
 param set-default HIL_ACT_FUNC1 0
 param set-default HIL_ACT_FUNC2 0
 param set-default HIL_ACT_FUNC3 201 # Rudder
-param set-default HIL_ACT_FUNC4 202 # Flaps
-param set-default HIL_ACT_FUNC5 101 # Throttle
+param set-default HIL_ACT_FUNC4 101 # Throttle
+param set-default HIL_ACT_FUNC5 202 # Flaps
 param set-default HIL_ACT_FUNC6 203 # Left Aileron
 param set-default HIL_ACT_FUNC7 204 # Right aileron
 param set-default HIL_ACT_FUNC8 205 # elevator
