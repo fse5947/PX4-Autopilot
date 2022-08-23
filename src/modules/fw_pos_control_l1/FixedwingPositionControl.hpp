@@ -211,6 +211,7 @@ private:
 	bool soar_climbout{false};
 	float soar_min_alt{25.0f};
 	float climbout_alt{150.0f};
+	float climbout_acc{5.0f};
 	Vector2f _soar_climbout_wp_local {};
 	Vector2d _soar_climbout_wp {};
 
@@ -539,7 +540,9 @@ private:
 
 		(ParamFloat<px4::params::NAV_FW_SOAR_MIN>) _param_nav_fw_soar_min,
 
-		(ParamFloat<px4::params::NAV_FW_SOAR_CLB>) _param_nav_fw_soar_climb
+		(ParamFloat<px4::params::NAV_FW_SOAR_CLB>) _param_nav_fw_soar_climb,
+
+		(ParamFloat<px4::params::NAV_FW_SOAR_ACC>) _param_nav_fw_soar_acc
 
 	)
 

@@ -25,7 +25,7 @@ class XMLOutput():
         xml_version = ET.SubElement(xml_parameters, "parameter_version_major")
         xml_version.text = "1"
         xml_version = ET.SubElement(xml_parameters, "parameter_version_minor")
-        xml_version.text = "17"
+        xml_version.text = "18"
         last_param_name = ""
         board_specific_param_set = False
         for group in groups:

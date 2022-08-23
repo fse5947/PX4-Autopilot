@@ -1135,6 +1135,7 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 
 	soar_min_alt = _param_nav_fw_soar_min.get();
 	climbout_alt = _param_nav_fw_soar_climb.get();
+	climbout_acc = _param_nav_fw_soar_acc.get();
 
 	float param_soar = _param_nav_fw_soar_en.get();
 
@@ -1143,7 +1144,7 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 	}
 
 	if (param_soar >= 1.0f) {
-		if (-_local_pos.z <= soar_min_alt || (soar_climbout && -_local_pos.z <= climbout_alt)) {
+		if (-_local_pos.z <= soar_min_alt || (soar_climbout && -_local_pos.z <= (climbout_alt - climbout_acc))) {
 			if (!soar_climbout) {
 				_soar_climbout_wp_local = Vector2f{_local_pos.x, _local_pos.y};
 				// _soar_climbout_wp = _global_local_proj_ref.reproject(_local_pos.x, _local_pos.y);
@@ -1280,6 +1281,7 @@ FixedwingPositionControl::control_auto_velocity(const hrt_abstime &now, const fl
 
 	soar_min_alt = _param_nav_fw_soar_min.get();
 	climbout_alt = _param_nav_fw_soar_climb.get();
+	climbout_acc = _param_nav_fw_soar_acc.get();
 
 	float param_soar = _param_nav_fw_soar_en.get();
 
@@ -1288,7 +1290,7 @@ FixedwingPositionControl::control_auto_velocity(const hrt_abstime &now, const fl
 	}
 
 	if (param_soar >= 1.0f) {
-		if (-_local_pos.z <= soar_min_alt || (soar_climbout && -_local_pos.z <= climbout_alt)) {
+		if (-_local_pos.z <= soar_min_alt || (soar_climbout && -_local_pos.z <= (climbout_alt - climbout_acc))) {
 			if (!soar_climbout) {
 				_soar_climbout_wp_local = Vector2f{_local_pos.x, _local_pos.y};
 			}
@@ -1409,6 +1411,7 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 
 	soar_min_alt = _param_nav_fw_soar_min.get();
 	climbout_alt = _param_nav_fw_soar_climb.get();
+	climbout_acc = _param_nav_fw_soar_acc.get();
 
 	float param_soar = _param_nav_fw_soar_en.get();
 
@@ -1417,7 +1420,7 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 	}
 
 	if (param_soar >= 1.0f) {
-		if (-_local_pos.z <= soar_min_alt || (soar_climbout && -_local_pos.z <= climbout_alt)) {
+		if (-_local_pos.z <= soar_min_alt || (soar_climbout && -_local_pos.z <= (climbout_alt - climbout_acc))) {
 			soar_enable = false;
 			soar_climbout = true;
 		} else {

@@ -231,6 +231,13 @@ public:
 	float get_nav_fw_soar_climb();
 
 	/**
+	 * @brief Get the nav fw soaring climbout altitude acceptance
+	 *
+	 * @return float
+	 */
+	float get_nav_fw_soar_acc();
+
+	/**
 	 * Get the cruising speed
 	 *
 	 * @return the desired cruising speed for this mission
@@ -470,6 +477,7 @@ private:
 		(ParamFloat<px4::params::NAV_FW_SOAR_EN>)   _param_nav_fw_soar_en,	/**< enable soaring*/
 		(ParamFloat<px4::params::NAV_FW_SOAR_MIN>)   _param_nav_fw_soar_min,	/**< minimum glide altitude*/
 		(ParamFloat<px4::params::NAV_FW_SOAR_CLB>)   _param_nav_fw_soar_climb,	/**< soaring climbout altitude*/
+		(ParamFloat<px4::params::NAV_FW_SOAR_ACC>)   _param_nav_fw_soar_acc,	/**< soaring climbout altitude acceptance*/
 
 		// non-navigator parameters
 		// Mission (MIS_*)

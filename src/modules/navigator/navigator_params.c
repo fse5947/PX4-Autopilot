@@ -238,3 +238,16 @@ PARAM_DEFINE_FLOAT(NAV_FW_SOAR_MIN, 25.0f);
  */
 PARAM_DEFINE_FLOAT(NAV_FW_SOAR_CLB, 50.0f);
 
+/**
+ * Soaring Climbout Altitude Acceptance
+ *
+ * Altitude acceptance radius at which aircraft will be assumed to have achieved climbout altitude
+ *
+ * @min 0.0
+ * @max 50.0
+ * @decimal 1
+ * @increment 1.0
+ * @group Mission
+ */
+PARAM_DEFINE_FLOAT(NAV_FW_SOAR_ACC, 5.0f);
+

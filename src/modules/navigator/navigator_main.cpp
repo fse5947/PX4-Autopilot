@@ -1000,6 +1000,11 @@ float Navigator::get_nav_fw_soar_climb()
 	return _param_nav_fw_soar_climb.get();
 }
 
+float Navigator::get_nav_fw_soar_acc()
+{
+	return _param_nav_fw_soar_acc.get();
+}
+
 float Navigator::get_default_altitude_acceptance_radius()
 {
 	if (get_vstatus()->vehicle_type == vehicle_status_s::VEHICLE_TYPE_FIXED_WING) {
