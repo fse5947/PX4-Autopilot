@@ -92,4 +92,5 @@ px4_add_romfs_files(
 	vtol_delta.aux.mix
 	vtol_tailsitter_duo.main.mix
 	vtol_tailsitter_duo_sat.main.mix
+	plane_hitl.main.mix
 )
