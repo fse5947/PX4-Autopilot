@@ -2477,7 +2477,7 @@ FixedwingPositionControl::Run()
 						double lon;
 						_global_local_proj_ref.reproject(trajectory_setpoint.x, trajectory_setpoint.y, lat, lon);
 						valid_setpoint = true;
-						_pos_sp_triplet.current.type = position_setpoint_s::SETPOINT_TYPE_LOITER;
+						_pos_sp_triplet.current.type = position_setpoint_s::SETPOINT_TYPE_POSITION;
 						_pos_sp_triplet.current.lat = lat;
 						_pos_sp_triplet.current.lon = lon;
 						_pos_sp_triplet.current.alt = _global_local_alt0 - trajectory_setpoint.z;
