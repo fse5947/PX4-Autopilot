@@ -31,8 +31,11 @@ rtps:
   - msg:     timesync
     receive: true
     send:    true
-  - msg:     trajectory_waypoint
-    send:    true
+  - msg:     vehicle_local_position_setpoint
+    receive: true
+  - msg:     trajectory_setpoint
+    base:    vehicle_local_position_setpoint
+    receive: true
   - msg:     vehicle_command
     receive: true
   - msg:     vehicle_control_mode
