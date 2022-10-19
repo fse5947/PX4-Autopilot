@@ -343,7 +343,7 @@ private:
 	/**
 	 * Detect an uncommanded descent
 	 */
-	void _detect_uncommanded_descent();
+	void _detect_uncommanded_descent(bool soar_enabled);
 
 	/**
 	 * Update the pitch setpoint

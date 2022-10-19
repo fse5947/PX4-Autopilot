@@ -260,19 +260,20 @@ void Navigator::run()
 					rep->previous.alt = get_global_position()->alt;
 
 
-					rep->current.type = position_setpoint_s::SETPOINT_TYPE_LOITER;
+					rep->current.type = position_setpoint_s::SETPOINT_TYPE_POSITION;
 
 					bool only_alt_change_requested = false;
 
 					// If no argument for ground speed, use default value.
 					if (cmd.param1 <= 0 || !PX4_ISFINITE(cmd.param1)) {
-						rep->current.cruising_speed = get_cruising_speed();
+						rep->current.cruising_throttle = get_cruising_throttle();
 
 					} else {
-						rep->current.cruising_speed = cmd.param1;
+						rep->current.cruising_throttle = cmd.param1 / 100;
+						set_cruising_throttle(cmd.param1 / 100);
 					}
 
-					rep->current.cruising_throttle = get_cruising_throttle();
+					rep->current.cruising_speed = get_cruising_speed();
 					rep->current.acceptance_radius = get_acceptance_radius();
 
 					// Go on and check which changes had been requested

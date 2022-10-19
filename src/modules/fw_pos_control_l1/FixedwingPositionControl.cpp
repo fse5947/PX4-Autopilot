@@ -1080,7 +1080,7 @@ FixedwingPositionControl::handle_setpoint_type(const uint8_t setpoint_type, cons
 			// POSITION: achieve position setpoint altitude via loiter
 			// close to waypoint, but altitude error greater than twice acceptance
 			if ((!_vehicle_status.in_transition_mode) && (dist >= 0.f)
-			    && ((dist_z > _param_nav_fw_alt_rad.get()) && param_soar < 1.0f)
+			    && ((dist_z > _param_nav_fw_alt_rad.get()) && param_soar < 1.0f && soar_enable < 1.0f)
 			    && (dist_xy < 2.f * math::max(acc_rad, loiter_radius_abs))) {
 				// SETPOINT_TYPE_POSITION -> SETPOINT_TYPE_LOITER
 				position_sp_type = position_setpoint_s::SETPOINT_TYPE_LOITER;
@@ -1175,12 +1175,14 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 		tecs_fw_thr_min = 0.0;
 		tecs_fw_thr_max = 0.0;
 		tecs_fw_mission_throttle = 0.0;
+		soar_enable = true;
 
 	} else {
 		_tecs.set_speed_weight(1.0f);
 		tecs_fw_thr_min = _param_fw_thr_min.get();
 		tecs_fw_thr_max = _param_fw_thr_max.get();
 		tecs_fw_mission_throttle = mission_throttle;
+		soar_enable = false;
 	}
 
 	// waypoint is a plain navigation waypoint
@@ -2485,7 +2487,7 @@ FixedwingPositionControl::Run()
 
 				}
 
-				if (PX4_ISFINITE(trajectory_setpoint.vx) && PX4_ISFINITE(trajectory_setpoint.vx)
+				if (PX4_ISFINITE(trajectory_setpoint.vx) && PX4_ISFINITE(trajectory_setpoint.vy)
 				    && PX4_ISFINITE(trajectory_setpoint.vz)) {
 					valid_setpoint = true;
 					_pos_sp_triplet.current.type = position_setpoint_s::SETPOINT_TYPE_POSITION;

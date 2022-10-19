@@ -349,7 +349,7 @@ void TECS::_update_throttle_setpoint(const float throttle_cruise)
 	_last_throttle_setpoint = constrain(throttle_setpoint, _throttle_setpoint_min, _throttle_setpoint_max);
 }
 
-void TECS::_detect_uncommanded_descent()
+void TECS::_detect_uncommanded_descent(bool soar_enabled)
 {
 	/*
 	 * This function detects a condition that can occur when the demanded airspeed is greater than the
@@ -363,7 +363,7 @@ void TECS::_detect_uncommanded_descent()
 	// If total energy is very low and reducing, throttle is high, and we are not in an underspeed condition, then enter uncommanded descent recovery mode
 	const bool enter_mode = !_uncommanded_descent_recovery && !_underspeed_detected && (_STE_error > 200.0f)
 				&& (STE_rate < 0.0f)
-				&& (_last_throttle_setpoint >= _throttle_setpoint_max * 0.9f);
+				&& (_last_throttle_setpoint >= _throttle_setpoint_max * 0.9f) && !soar_enabled;
 
 	// If we enter an underspeed condition or recover the required total energy, then exit uncommanded descent recovery mode
 	const bool exit_mode = _uncommanded_descent_recovery && (_underspeed_detected || (_STE_error < 0.0f));
@@ -593,7 +593,7 @@ void TECS::update_pitch_throttle(float pitch, float baro_altitude, float hgt_set
 	_update_speed_height_weights();
 
 	// Detect an uncommanded descent caused by an unachievable airspeed demand
-	_detect_uncommanded_descent();
+	_detect_uncommanded_descent(soar_en);
 
 	// Calculate the demanded true airspeed
 	_update_speed_setpoint();
