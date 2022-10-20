@@ -61,3 +61,5 @@ rtps:
   - msg:     actuator_controls_0
     base:    actuator_controls
     send:    true
+  - msg:     landing_gear
+    send:    true
