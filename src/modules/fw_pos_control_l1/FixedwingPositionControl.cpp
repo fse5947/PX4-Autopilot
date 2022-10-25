@@ -1445,12 +1445,14 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 		tecs_fw_thr_min = 0.0;
 		tecs_fw_thr_max = 0.0;
 		tecs_fw_mission_throttle = 0.0;
+		soar_enable = true;
 
 	} else {
 		_tecs.set_speed_weight(1.0f);
 		tecs_fw_thr_min = _param_fw_thr_min.get();
 		tecs_fw_thr_max = _param_fw_thr_max.get();
 		tecs_fw_mission_throttle = mission_throttle;
+		soar_enable = false;
 	}
 
 	/* waypoint is a loiter waypoint */
