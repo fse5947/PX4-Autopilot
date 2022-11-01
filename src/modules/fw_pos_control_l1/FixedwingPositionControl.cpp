@@ -1169,7 +1169,7 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 		mission_throttle = pos_sp_curr.cruising_throttle;
 	}
 
-	if (mission_throttle < _param_fw_thr_min.get() || (soar_enable && !soar_climbout)) {
+	if (mission_throttle <= _param_fw_thr_min.get() || (soar_enable && !soar_climbout)) {
 		/* enable gliding with this waypoint */
 		_tecs.set_speed_weight(2.0f);
 		tecs_fw_thr_min = 0.0;

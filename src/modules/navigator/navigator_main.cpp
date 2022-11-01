@@ -259,19 +259,22 @@ void Navigator::run()
 					rep->previous.lon = get_global_position()->lon;
 					rep->previous.alt = get_global_position()->alt;
 
-
-					rep->current.type = position_setpoint_s::SETPOINT_TYPE_POSITION;
+					if (cmd.param3 >= 1.0f) {
+						rep->current.type = position_setpoint_s::SETPOINT_TYPE_POSITION;
+					} else {
+						rep->current.type = position_setpoint_s::SETPOINT_TYPE_LOITER;
+					}
 
 					bool only_alt_change_requested = false;
 
 					// If no argument for ground speed, use default value. MODIFIED
-					if (cmd.param1 <= 0 || !PX4_ISFINITE(cmd.param1)) {
-						rep->current.cruising_throttle = cmd.param1;
-						set_cruising_throttle(cmd.param1);
+					if (cmd.param1 < 0 || !PX4_ISFINITE(cmd.param1)) {
+						rep->current.cruising_throttle = get_cruising_throttle();
+						// set_cruising_throttle(cmd.param1);
 
 					} else {
-						rep->current.cruising_throttle = cmd.param1 / 100;
-						set_cruising_throttle(cmd.param1 / 100);
+					rep->current.cruising_throttle = cmd.param1 / 100;
+					set_cruising_throttle(cmd.param1 / 100);
 					}
 
 					rep->current.cruising_speed = get_cruising_speed();
