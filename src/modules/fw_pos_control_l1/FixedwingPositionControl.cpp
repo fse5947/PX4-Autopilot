@@ -36,6 +36,8 @@
 #include <vtol_att_control/vtol_type.h>
 #include <px4_platform_common/events.h>
 
+#include <iostream>
+
 using math::constrain;
 using math::max;
 using math::min;
@@ -1439,13 +1441,15 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 		mission_throttle = pos_sp_curr.cruising_throttle;
 	}
 
-	if (mission_throttle < _param_fw_thr_min.get() || (soar_enable && !soar_climbout)) {
+	if (mission_throttle <= _param_fw_thr_min.get() || (soar_enable && !soar_climbout)) {
 		/* enable gliding with this waypoint */
 		_tecs.set_speed_weight(2.0f);
 		tecs_fw_thr_min = 0.0;
 		tecs_fw_thr_max = 0.0;
 		tecs_fw_mission_throttle = 0.0;
 		soar_enable = true;
+
+		// std::cout << "Setting GLIDING in LOITER" << std::endl;
 
 	} else {
 		_tecs.set_speed_weight(1.0f);
@@ -1454,6 +1458,7 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 		tecs_fw_mission_throttle = mission_throttle;
 		soar_enable = false;
 	}
+
 
 	/* waypoint is a loiter waypoint */
 	float loiter_radius = pos_sp_curr.loiter_radius;

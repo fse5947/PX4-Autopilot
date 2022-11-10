@@ -273,8 +273,8 @@ void Navigator::run()
 						// set_cruising_throttle(cmd.param1);
 
 					} else {
-					rep->current.cruising_throttle = cmd.param1 / 100;
-					set_cruising_throttle(cmd.param1 / 100);
+						rep->current.cruising_throttle = cmd.param1 / 100;
+						set_cruising_throttle(cmd.param1 / 100);
 					}
 
 					rep->current.cruising_speed = get_cruising_speed();
@@ -386,13 +386,14 @@ void Navigator::run()
 						rep->current.loiter_direction = math::signNoZero(cmd.param1);
 					}
 
-					if (cmd.param1 <= 0 || !PX4_ISFINITE(cmd.param1)) {
-						rep->current.cruising_throttle = cmd.param1;
-						set_cruising_throttle(cmd.param1);
+
+					if (cmd.param4 < 0 || !PX4_ISFINITE(cmd.param4)) {
+						rep->current.cruising_throttle = get_cruising_throttle();
+						// set_cruising_throttle(cmd.param1);
 
 					} else {
-						rep->current.cruising_throttle = cmd.param1 / 100;
-						set_cruising_throttle(cmd.param1 / 100);
+						rep->current.cruising_throttle = cmd.param4 / 100;
+						set_cruising_throttle(cmd.param4 / 100);
 					}
 
 					rep->current.lat = position_setpoint.lat;
