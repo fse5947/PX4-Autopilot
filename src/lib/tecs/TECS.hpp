@@ -91,7 +91,7 @@ public:
 				   float EAS_setpoint, float equivalent_airspeed, float eas_to_tas, bool climb_out_setpoint, float pitch_min_climbout,
 				   float throttle_min, float throttle_setpoint_max, float throttle_cruise,
 				   float pitch_limit_min, float pitch_limit_max, float target_climbrate, float target_sinkrate, float hgt_rate_sp = NAN,
-				   bool soar_en = false);
+				   bool soar_en = false, bool soar_climb = false);
 
 	float get_throttle_setpoint() { return _last_throttle_setpoint; }
 	float get_pitch_setpoint() { return _last_pitch_setpoint; }
@@ -328,7 +328,7 @@ private:
 	/**
 	 * Detect if the system is not capable of maintaining airspeed
 	 */
-	void _detect_underspeed();
+	void _detect_underspeed(bool soar_enabled, bool soar_climb);
 
 	/**
 	 * Update specific energy
@@ -343,7 +343,7 @@ private:
 	/**
 	 * Detect an uncommanded descent
 	 */
-	void _detect_uncommanded_descent(bool soar_enabled);
+	void _detect_uncommanded_descent(bool soar_enabled, bool soar_climb);
 
 	/**
 	 * Update the pitch setpoint

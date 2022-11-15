@@ -36,8 +36,6 @@
 #include <vtol_att_control/vtol_type.h>
 #include <px4_platform_common/events.h>
 
-#include <iostream>
-
 using math::constrain;
 using math::max;
 using math::min;
@@ -1028,6 +1026,7 @@ FixedwingPositionControl::control_auto_descend(const hrt_abstime &now)
 				   _param_fw_p_lim_min.get(),
 				   false,
 				   false,
+				   false,
 				   descend_rate);
 
 	_att_sp.roll_body = math::radians(_param_nav_gpsf_r.get()); // open loop loiter bank angle
@@ -1268,7 +1267,7 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 				   tecs_fw_thr_max,
 				   tecs_fw_mission_throttle,
 				   false,
-				   radians(_param_fw_p_lim_min.get()), soar_enable);
+				   radians(_param_fw_p_lim_min.get()), soar_enable, soar_climbout);
 }
 
 void
@@ -1371,6 +1370,7 @@ FixedwingPositionControl::control_auto_velocity(const hrt_abstime &now, const fl
 				   false,
 				   radians(_param_fw_p_lim_min.get()),
 				   soar_enable,
+				   soar_climbout,
 				   tecs_status_s::TECS_MODE_NORMAL,
 				   pos_sp_curr.vz);
 }
@@ -1448,8 +1448,6 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 		tecs_fw_thr_max = 0.0;
 		tecs_fw_mission_throttle = 0.0;
 		soar_enable = true;
-
-		// std::cout << "Setting GLIDING in LOITER" << std::endl;
 
 	} else {
 		_tecs.set_speed_weight(1.0f);
@@ -1537,7 +1535,7 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 				   tecs_fw_thr_max,
 				   tecs_fw_mission_throttle,
 				   false,
-				   radians(_param_fw_p_lim_min.get()), soar_enable);
+				   radians(_param_fw_p_lim_min.get()), soar_enable, soar_climbout);
 }
 
 void
@@ -2209,6 +2207,7 @@ FixedwingPositionControl::control_manual_altitude(const hrt_abstime &now, const 
 				   pitch_limit_min,
 				   false,
 				   false,
+				   false,
 				   height_rate_sp);
 
 	_att_sp.roll_body = _manual_control_setpoint.y * radians(_param_fw_r_lim.get());
@@ -2342,6 +2341,7 @@ FixedwingPositionControl::control_manual_position(const hrt_abstime &now, const 
 				   _param_fw_thr_cruise.get(),
 				   false,
 				   pitch_limit_min,
+				   false,
 				   false,
 				   false,
 				   height_rate_sp);
@@ -2728,7 +2728,7 @@ FixedwingPositionControl::tecs_update_pitch_throttle(const hrt_abstime &now, flo
 		float pitch_min_rad, float pitch_max_rad,
 		float throttle_min, float throttle_max, float throttle_cruise,
 		bool climbout_mode, float climbout_pitch_min_rad, bool soar_en,
-		bool disable_underspeed_detection, float hgt_rate_sp)
+		bool soar_climb, bool disable_underspeed_detection, float hgt_rate_sp)
 {
 	const float dt = math::constrain((now - _last_tecs_update) * 1e-6f, MIN_AUTO_TIMESTEP, MAX_AUTO_TIMESTEP);
 	_last_tecs_update = now;
@@ -2829,7 +2829,7 @@ FixedwingPositionControl::tecs_update_pitch_throttle(const hrt_abstime &now, flo
 				    throttle_min, throttle_max, throttle_cruise,
 				    pitch_min_rad - radians(_param_fw_psp_off.get()),
 				    pitch_max_rad - radians(_param_fw_psp_off.get()),
-				    _param_climbrate_target.get(), _param_sinkrate_target.get(), hgt_rate_sp, soar_en);
+				    _param_climbrate_target.get(), _param_sinkrate_target.get(), hgt_rate_sp, soar_en, soar_climb);
 
 	tecs_status_publish();
 }

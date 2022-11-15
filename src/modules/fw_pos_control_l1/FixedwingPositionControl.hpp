@@ -444,7 +444,7 @@ private:
 					float pitch_min_rad, float pitch_max_rad,
 					float throttle_min, float throttle_max, float throttle_cruise,
 					bool climbout_mode, float climbout_pitch_min_rad, bool soar_en = false,
-					bool disable_underspeed_detection = false, float hgt_rate_sp = NAN);
+					bool soar_climb = false, bool disable_underspeed_detection = false, float hgt_rate_sp = NAN);
 
 	DEFINE_PARAMETERS(
 
