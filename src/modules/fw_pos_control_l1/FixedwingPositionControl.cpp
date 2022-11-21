@@ -1015,6 +1015,8 @@ FixedwingPositionControl::control_auto_descend(const hrt_abstime &now)
 	// but not letting it drift too far away.
 	const float descend_rate = -0.5f;
 
+	_tecs.set_soar_variables(false, false);
+
 	tecs_update_pitch_throttle(now, _current_altitude,
 				   _param_fw_airspd_trim.get(),
 				   radians(_param_fw_p_lim_min.get()),
@@ -1024,8 +1026,6 @@ FixedwingPositionControl::control_auto_descend(const hrt_abstime &now)
 				   _param_fw_thr_cruise.get(),
 				   false,
 				   _param_fw_p_lim_min.get(),
-				   false,
-				   false,
 				   false,
 				   descend_rate);
 
@@ -1255,6 +1255,8 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 		}
 	}
 
+	_tecs.set_soar_variables(soar_enable, soar_climbout);
+
 	_att_sp.yaw_body = _yaw; // yaw is not controlled, so set setpoint to current yaw
 
 	_att_sp.apply_flaps = vehicle_attitude_setpoint_s::FLAPS_OFF;
@@ -1267,7 +1269,7 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 				   tecs_fw_thr_max,
 				   tecs_fw_mission_throttle,
 				   false,
-				   radians(_param_fw_p_lim_min.get()), soar_enable, soar_climbout);
+				   radians(_param_fw_p_lim_min.get()));
 }
 
 void
@@ -1360,6 +1362,8 @@ FixedwingPositionControl::control_auto_velocity(const hrt_abstime &now, const fl
 
 	_att_sp.apply_flaps = vehicle_attitude_setpoint_s::FLAPS_OFF;
 
+	_tecs.set_soar_variables(soar_enable, soar_climbout);
+
 	tecs_update_pitch_throttle(now, position_sp_alt,
 				   target_airspeed,
 				   radians(_param_fw_p_lim_min.get()),
@@ -1369,8 +1373,6 @@ FixedwingPositionControl::control_auto_velocity(const hrt_abstime &now, const fl
 				   tecs_fw_mission_throttle,
 				   false,
 				   radians(_param_fw_p_lim_min.get()),
-				   soar_enable,
-				   soar_climbout,
 				   tecs_status_s::TECS_MODE_NORMAL,
 				   pos_sp_curr.vz);
 }
@@ -1527,6 +1529,8 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 		_tecs.set_height_error_time_constant(_param_fw_thrtc_sc.get() * _param_fw_t_h_error_tc.get());
 	}
 
+	_tecs.set_soar_variables(soar_enable, soar_climbout);
+
 	tecs_update_pitch_throttle(now, alt_sp,
 				   target_airspeed,
 				   radians(_param_fw_p_lim_min.get()),
@@ -1535,7 +1539,7 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 				   tecs_fw_thr_max,
 				   tecs_fw_mission_throttle,
 				   false,
-				   radians(_param_fw_p_lim_min.get()), soar_enable, soar_climbout);
+				   radians(_param_fw_p_lim_min.get()));
 }
 
 void
@@ -1723,6 +1727,8 @@ FixedwingPositionControl::control_auto_takeoff(const hrt_abstime &now, const Vec
 			 * depending on the state of the launch */
 			const float takeoff_pitch_max_deg = _launchDetector.getPitchMax(_param_fw_p_lim_max.get());
 			const float altitude_error = pos_sp_curr.alt - _current_altitude;
+
+			_tecs.set_soar_variables(false, false);
 
 			/* apply minimum pitch and limit roll if target altitude is not within climbout_diff meters */
 			if (_param_fw_clmbout_diff.get() > 0.0f && altitude_error > _param_fw_clmbout_diff.get()) {
@@ -2037,6 +2043,8 @@ FixedwingPositionControl::control_auto_landing(const hrt_abstime &now, const Vec
 			_att_sp.yaw_body = _yaw; // yaw is not controlled, so set setpoint to current yaw
 		}
 
+		_tecs.set_soar_variables(false, false);
+
 		tecs_update_pitch_throttle(now, terrain_alt + flare_curve_alt_rel,
 					   target_airspeed,
 					   radians(_param_fw_lnd_fl_pmin.get()),
@@ -2045,8 +2053,7 @@ FixedwingPositionControl::control_auto_landing(const hrt_abstime &now, const Vec
 					   throttle_max,
 					   throttle_land,
 					   false,
-					   _land_motor_lim ? radians(_param_fw_lnd_fl_pmin.get()) : radians(_param_fw_p_lim_min.get()),
-					   true);
+					   _land_motor_lim ? radians(_param_fw_lnd_fl_pmin.get()) : radians(_param_fw_p_lim_min.get()));
 
 		if (!_land_noreturn_vertical) {
 			// just started with the flaring phase
@@ -2140,6 +2147,8 @@ FixedwingPositionControl::control_auto_landing(const hrt_abstime &now, const Vec
 
 		_att_sp.yaw_body = _yaw; // yaw is not controlled, so set setpoint to current yaw
 
+		_tecs.set_soar_variables(false, false);
+
 		tecs_update_pitch_throttle(now, altitude_desired,
 					   target_airspeed,
 					   radians(_param_fw_p_lim_min.get()),
@@ -2196,6 +2205,8 @@ FixedwingPositionControl::control_manual_altitude(const hrt_abstime &now, const 
 		throttle_max = 0.0f;
 	}
 
+	_tecs.set_soar_variables(false, false);
+
 	tecs_update_pitch_throttle(now, altitude_sp_amsl,
 				   altctrl_airspeed,
 				   radians(_param_fw_p_lim_min.get()),
@@ -2205,8 +2216,6 @@ FixedwingPositionControl::control_manual_altitude(const hrt_abstime &now, const 
 				   _param_fw_thr_cruise.get(),
 				   false,
 				   pitch_limit_min,
-				   false,
-				   false,
 				   false,
 				   height_rate_sp);
 
@@ -2332,6 +2341,8 @@ FixedwingPositionControl::control_manual_position(const hrt_abstime &now, const 
 		}
 	}
 
+	_tecs.set_soar_variables(false, false);
+
 	tecs_update_pitch_throttle(now, altitude_sp_amsl,
 				   target_airspeed,
 				   radians(_param_fw_p_lim_min.get()),
@@ -2341,8 +2352,6 @@ FixedwingPositionControl::control_manual_position(const hrt_abstime &now, const 
 				   _param_fw_thr_cruise.get(),
 				   false,
 				   pitch_limit_min,
-				   false,
-				   false,
 				   false,
 				   height_rate_sp);
 
@@ -2727,8 +2736,7 @@ void
 FixedwingPositionControl::tecs_update_pitch_throttle(const hrt_abstime &now, float alt_sp, float airspeed_sp,
 		float pitch_min_rad, float pitch_max_rad,
 		float throttle_min, float throttle_max, float throttle_cruise,
-		bool climbout_mode, float climbout_pitch_min_rad, bool soar_en,
-		bool soar_climb, bool disable_underspeed_detection, float hgt_rate_sp)
+		bool climbout_mode, float climbout_pitch_min_rad, bool disable_underspeed_detection, float hgt_rate_sp)
 {
 	const float dt = math::constrain((now - _last_tecs_update) * 1e-6f, MIN_AUTO_TIMESTEP, MAX_AUTO_TIMESTEP);
 	_last_tecs_update = now;
@@ -2829,7 +2837,7 @@ FixedwingPositionControl::tecs_update_pitch_throttle(const hrt_abstime &now, flo
 				    throttle_min, throttle_max, throttle_cruise,
 				    pitch_min_rad - radians(_param_fw_psp_off.get()),
 				    pitch_max_rad - radians(_param_fw_psp_off.get()),
-				    _param_climbrate_target.get(), _param_sinkrate_target.get(), hgt_rate_sp, soar_en, soar_climb);
+				    _param_climbrate_target.get(), _param_sinkrate_target.get(), hgt_rate_sp);
 
 	tecs_status_publish();
 }

@@ -90,8 +90,7 @@ public:
 	void update_pitch_throttle(float pitch, float baro_altitude, float hgt_setpoint,
 				   float EAS_setpoint, float equivalent_airspeed, float eas_to_tas, bool climb_out_setpoint, float pitch_min_climbout,
 				   float throttle_min, float throttle_setpoint_max, float throttle_cruise,
-				   float pitch_limit_min, float pitch_limit_max, float target_climbrate, float target_sinkrate, float hgt_rate_sp = NAN,
-				   bool soar_en = false, bool soar_climb = false);
+				   float pitch_limit_min, float pitch_limit_max, float target_climbrate, float target_sinkrate, float hgt_rate_sp = NAN);
 
 	float get_throttle_setpoint() { return _last_throttle_setpoint; }
 	float get_pitch_setpoint() { return _last_pitch_setpoint; }
@@ -140,6 +139,8 @@ public:
 	void set_speed_derivative_time_constant(float time_const) { _speed_derivative_time_const = time_const; }
 
 	void set_seb_rate_ff_gain(float ff_gain) { _SEB_rate_ff = ff_gain; }
+
+	void set_soar_variables(bool soar_en, bool soar_climb) { _soar_enabled = soar_en; _soar_climbout = soar_climb; }
 
 
 	// TECS status
@@ -309,6 +310,10 @@ private:
 	bool _states_initialized{false};					///< true when TECS states have been iniitalized
 	bool _in_air{false};						///< true when the vehicle is flying
 
+	// soaring variables
+	bool _soar_enabled{false};
+	bool _soar_climbout{false};
+
 	/**
 	 * Update the airspeed internal state using a second order complementary filter
 	 */
@@ -323,12 +328,12 @@ private:
 	 * Calculate desired height rate from altitude demand
 	 */
 	void runAltitudeControllerSmoothVelocity(float alt_sp_amsl_m, float target_climbrate_m_s, float target_sinkrate_m_s,
-			float alt_amsl, bool soar_enabled);
+			float alt_amsl);
 
 	/**
 	 * Detect if the system is not capable of maintaining airspeed
 	 */
-	void _detect_underspeed(bool soar_enabled, bool soar_climb);
+	void _detect_underspeed();
 
 	/**
 	 * Update specific energy
@@ -343,7 +348,7 @@ private:
 	/**
 	 * Detect an uncommanded descent
 	 */
-	void _detect_uncommanded_descent(bool soar_enabled, bool soar_climb);
+	void _detect_uncommanded_descent();
 
 	/**
 	 * Update the pitch setpoint
@@ -353,7 +358,7 @@ private:
 	void _updateTrajectoryGenerationConstraints();
 
 	void _calculateHeightRateSetpoint(float altitude_sp_amsl, float height_rate_sp, float target_climbrate,
-					  float target_sinkrate, float altitude_amsl, bool soar_enabled);
+					  float target_sinkrate, float altitude_amsl);
 
 	/**
 	 * Initialize the controller

@@ -176,12 +176,12 @@ void TECS::_update_speed_setpoint()
 
 void TECS::runAltitudeControllerSmoothVelocity(float alt_sp_amsl_m, float target_climbrate_m_s,
 		float target_sinkrate_m_s,
-		float alt_amsl, bool soar_enabled)
+		float alt_amsl)
 {
 	target_climbrate_m_s = math::min(target_climbrate_m_s, _max_climb_rate);
 	target_sinkrate_m_s = math::min(target_sinkrate_m_s, _max_sink_rate);
 
-	if (soar_enabled) {
+	if (_soar_enabled) {
 		alt_sp_amsl_m = alt_amsl;
 	}
 
@@ -202,7 +202,7 @@ void TECS::runAltitudeControllerSmoothVelocity(float alt_sp_amsl_m, float target
 	_hgt_rate_setpoint = math::constrain(_hgt_rate_setpoint, -_max_sink_rate, _max_climb_rate);
 }
 
-void TECS::_detect_underspeed(bool soar_enabled, bool soar_climb)
+void TECS::_detect_underspeed()
 {
 	if (!_detect_underspeed_enabled) {
 		_underspeed_detected = false;
@@ -210,7 +210,7 @@ void TECS::_detect_underspeed(bool soar_enabled, bool soar_climb)
 	}
 
 	if ((((_tas_state < _TAS_min * 0.9f) && (_last_throttle_setpoint >= _throttle_setpoint_max * 0.95f))
-	    || ((_vert_pos_state < _hgt_setpoint) && _underspeed_detected)) && !soar_enabled && !soar_climb) {
+	    || ((_vert_pos_state < _hgt_setpoint) && _underspeed_detected)) && !_soar_enabled && !_soar_climbout) {
 
 		_underspeed_detected = true;
 
@@ -349,7 +349,7 @@ void TECS::_update_throttle_setpoint(const float throttle_cruise)
 	_last_throttle_setpoint = constrain(throttle_setpoint, _throttle_setpoint_min, _throttle_setpoint_max);
 }
 
-void TECS::_detect_uncommanded_descent(bool soar_enabled, bool soar_climb)
+void TECS::_detect_uncommanded_descent()
 {
 	/*
 	 * This function detects a condition that can occur when the demanded airspeed is greater than the
@@ -363,7 +363,7 @@ void TECS::_detect_uncommanded_descent(bool soar_enabled, bool soar_climb)
 	// If total energy is very low and reducing, throttle is high, and we are not in an underspeed condition, then enter uncommanded descent recovery mode
 	const bool enter_mode = !_uncommanded_descent_recovery && !_underspeed_detected && (_STE_error > 200.0f)
 				&& (STE_rate < 0.0f)
-				&& (_last_throttle_setpoint >= _throttle_setpoint_max * 0.9f) && !soar_enabled && !soar_climb;
+				&& (_last_throttle_setpoint >= _throttle_setpoint_max * 0.9f) && !_soar_enabled && !_soar_climbout;
 
 	// If we enter an underspeed condition or recover the required total energy, then exit uncommanded descent recovery mode
 	const bool exit_mode = _uncommanded_descent_recovery && (_underspeed_detected || (_STE_error < 0.0f));
@@ -457,7 +457,7 @@ void TECS::_updateTrajectoryGenerationConstraints()
 }
 
 void TECS::_calculateHeightRateSetpoint(float altitude_sp_amsl, float height_rate_sp, float target_climbrate,
-					float target_sinkrate, float altitude_amsl, bool soar_enabled)
+					float target_sinkrate, float altitude_amsl)
 {
 	bool control_altitude = true;
 	const bool input_is_height_rate = PX4_ISFINITE(height_rate_sp);
@@ -477,7 +477,7 @@ void TECS::_calculateHeightRateSetpoint(float altitude_sp_amsl, float height_rat
 
 
 	if (control_altitude) {
-		runAltitudeControllerSmoothVelocity(altitude_sp_amsl, target_climbrate, target_sinkrate, altitude_amsl, soar_enabled);
+		runAltitudeControllerSmoothVelocity(altitude_sp_amsl, target_climbrate, target_sinkrate, altitude_amsl);
 
 	} else {
 		_alt_control_traj_generator.setCurrentVelocity(_hgt_rate_setpoint);
@@ -558,7 +558,7 @@ void TECS::_update_STE_rate_lim()
 void TECS::update_pitch_throttle(float pitch, float baro_altitude, float hgt_setpoint,
 				 float EAS_setpoint, float equivalent_airspeed, float eas_to_tas, bool climb_out_setpoint, float pitch_min_climbout,
 				 float throttle_min, float throttle_max, float throttle_cruise, float pitch_limit_min, float pitch_limit_max,
-				 float target_climbrate, float target_sinkrate, float hgt_rate_sp, bool soar_en, bool soar_climb)
+				 float target_climbrate, float target_sinkrate, float hgt_rate_sp)
 {
 	// Calculate the time since last update (seconds)
 	uint64_t now = hrt_absolute_time();
@@ -588,17 +588,17 @@ void TECS::update_pitch_throttle(float pitch, float baro_altitude, float hgt_set
 	_update_STE_rate_lim();
 
 	// Detect an underspeed condition
-	_detect_underspeed(soar_en, soar_climb);
+	_detect_underspeed();
 
 	_update_speed_height_weights();
 
 	// Detect an uncommanded descent caused by an unachievable airspeed demand
-	_detect_uncommanded_descent(soar_en, soar_climb);
+	_detect_uncommanded_descent();
 
 	// Calculate the demanded true airspeed
 	_update_speed_setpoint();
 
-	_calculateHeightRateSetpoint(hgt_setpoint, hgt_rate_sp, target_climbrate, target_sinkrate, baro_altitude, soar_en);
+	_calculateHeightRateSetpoint(hgt_setpoint, hgt_rate_sp, target_climbrate, target_sinkrate, baro_altitude);
 
 	// Calculate the specific energy values required by the control loop
 	_update_energy_estimates();
