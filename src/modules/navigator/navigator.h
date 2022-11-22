@@ -208,34 +208,12 @@ public:
 	 */
 	float get_altitude_acceptance_radius();
 
-
 	/**
-	 * @brief Get the nav fw soaring status
+	 * @brief Get the nav fw gliding status
 	 *
 	 * @return float
 	 */
-	float get_nav_fw_soaring();
-
-	/**
-	 * @brief Get the nav fw soaring minimum altitude
-	 *
-	 * @return float
-	 */
-	float get_nav_fw_soar_min();
-
-	/**
-	 * @brief Get the nav fw soaring climbout altitude
-	 *
-	 * @return float
-	 */
-	float get_nav_fw_soar_climb();
-
-	/**
-	 * @brief Get the nav fw soaring climbout altitude acceptance
-	 *
-	 * @return float
-	 */
-	float get_nav_fw_soar_acc();
+	float get_nav_fw_gliding();
 
 	/**
 	 * Get the cruising speed
@@ -474,10 +452,10 @@ private:
 		(ParamInt<px4::params::NAV_TRAFF_AVOID>)    _param_nav_traff_avoid,	/**< avoiding other aircraft is enabled */
 		(ParamFloat<px4::params::NAV_TRAFF_A_RADU>) _param_nav_traff_a_radu,	/**< avoidance Distance Unmanned*/
 		(ParamFloat<px4::params::NAV_TRAFF_A_RADM>) _param_nav_traff_a_radm,	/**< avoidance Distance Manned*/
-		(ParamFloat<px4::params::NAV_FW_SOAR_EN>)   _param_nav_fw_soar_en,	/**< enable soaring*/
-		(ParamFloat<px4::params::NAV_FW_SOAR_MIN>)   _param_nav_fw_soar_min,	/**< minimum glide altitude*/
-		(ParamFloat<px4::params::NAV_FW_SOAR_CLB>)   _param_nav_fw_soar_climb,	/**< soaring climbout altitude*/
-		(ParamFloat<px4::params::NAV_FW_SOAR_ACC>)   _param_nav_fw_soar_acc,	/**< soaring climbout altitude acceptance*/
+		(ParamFloat<px4::params::NAV_FW_GLIDE_EN>)   _param_nav_fw_glide_en,	/**< enable gliding*/
+		// (ParamFloat<px4::params::NAV_FW_GLIDE_MIN>)   _param_nav_fw_glide_min,	/**< minimum glide altitude*/
+		// (ParamFloat<px4::params::NAV_FW_GLIDE_CLB>)   _param_nav_fw_glide_climb,	/**< gliding climbout altitude*/
+		// (ParamFloat<px4::params::NAV_FW_GLIDE_ACC>)   _param_nav_fw_glide_acc,	/**< gliding climbout altitude acceptance*/
 
 		// non-navigator parameters
 		// Mission (MIS_*)

@@ -1000,24 +1000,9 @@ float Navigator::get_default_acceptance_radius()
 	return _param_nav_acc_rad.get();
 }
 
-float Navigator::get_nav_fw_soaring()
+float Navigator::get_nav_fw_gliding()
 {
-	return _param_nav_fw_soar_en.get();
-}
-
-float Navigator::get_nav_fw_soar_min()
-{
-	return _param_nav_fw_soar_min.get();
-}
-
-float Navigator::get_nav_fw_soar_climb()
-{
-	return _param_nav_fw_soar_climb.get();
-}
-
-float Navigator::get_nav_fw_soar_acc()
-{
-	return _param_nav_fw_soar_acc.get();
+	return _param_nav_fw_glide_en.get();
 }
 
 float Navigator::get_default_altitude_acceptance_radius()

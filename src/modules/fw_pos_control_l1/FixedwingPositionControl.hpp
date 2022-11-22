@@ -206,14 +206,14 @@ private:
 
 	bool _landed{true};
 
-	/* Soaring */
-	bool soar_enable{false};
-	bool soar_climbout{false};
-	float soar_min_alt{25.0f};
+	/* Gliding */
+	bool glide_enable{false};
+	bool glide_climbout{false};
+	float glide_min_alt{25.0f};
 	float climbout_alt{150.0f};
 	float climbout_acc{5.0f};
-	Vector2f _soar_climbout_wp_local {};
-	Vector2d _soar_climbout_wp {};
+	Vector2f _glide_climbout_wp_local {};
+	Vector2d _glide_climbout_wp {};
 
 	/* Landing */
 	bool _land_noreturn_horizontal{false};
@@ -536,13 +536,13 @@ private:
 
 		(ParamFloat<px4::params::NAV_FW_ALT_RAD>) _param_nav_fw_alt_rad,
 
-		(ParamFloat<px4::params::NAV_FW_SOAR_EN>) _param_nav_fw_soar_en,
+		(ParamFloat<px4::params::NAV_FW_GLIDE_EN>) _param_nav_fw_glide_en,
 
-		(ParamFloat<px4::params::NAV_FW_SOAR_MIN>) _param_nav_fw_soar_min,
+		(ParamFloat<px4::params::NAV_FW_GLIDE_MIN>) _param_nav_fw_glide_min,
 
-		(ParamFloat<px4::params::NAV_FW_SOAR_CLB>) _param_nav_fw_soar_climb,
+		(ParamFloat<px4::params::NAV_FW_GLIDE_CLB>) _param_nav_fw_glide_climb,
 
-		(ParamFloat<px4::params::NAV_FW_SOAR_ACC>) _param_nav_fw_soar_acc
+		(ParamFloat<px4::params::NAV_FW_GLIDE_ACC>) _param_nav_fw_glide_acc
 
 	)
 

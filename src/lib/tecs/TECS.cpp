@@ -181,7 +181,7 @@ void TECS::runAltitudeControllerSmoothVelocity(float alt_sp_amsl_m, float target
 	target_climbrate_m_s = math::min(target_climbrate_m_s, _max_climb_rate);
 	target_sinkrate_m_s = math::min(target_sinkrate_m_s, _max_sink_rate);
 
-	if (_soar_enabled) {
+	if (_glide_enabled) {
 		alt_sp_amsl_m = alt_amsl;
 	}
 
@@ -210,7 +210,7 @@ void TECS::_detect_underspeed()
 	}
 
 	if ((((_tas_state < _TAS_min * 0.9f) && (_last_throttle_setpoint >= _throttle_setpoint_max * 0.95f))
-	    || ((_vert_pos_state < _hgt_setpoint) && _underspeed_detected)) && !_soar_enabled && !_soar_climbout) {
+	    || ((_vert_pos_state < _hgt_setpoint) && _underspeed_detected)) && !_glide_enabled) {
 
 		_underspeed_detected = true;
 
@@ -363,7 +363,7 @@ void TECS::_detect_uncommanded_descent()
 	// If total energy is very low and reducing, throttle is high, and we are not in an underspeed condition, then enter uncommanded descent recovery mode
 	const bool enter_mode = !_uncommanded_descent_recovery && !_underspeed_detected && (_STE_error > 200.0f)
 				&& (STE_rate < 0.0f)
-				&& (_last_throttle_setpoint >= _throttle_setpoint_max * 0.9f) && !_soar_enabled && !_soar_climbout;
+				&& (_last_throttle_setpoint >= _throttle_setpoint_max * 0.9f) && !_glide_enabled && !_glide_climbout;
 
 	// If we enter an underspeed condition or recover the required total energy, then exit uncommanded descent recovery mode
 	const bool exit_mode = _uncommanded_descent_recovery && (_underspeed_detected || (_STE_error < 0.0f));

@@ -140,7 +140,7 @@ public:
 
 	void set_seb_rate_ff_gain(float ff_gain) { _SEB_rate_ff = ff_gain; }
 
-	void set_soar_variables(bool soar_en, bool soar_climb) { _soar_enabled = soar_en; _soar_climbout = soar_climb; }
+	void set_glide_variables(bool glide_en, bool glide_climb) { _glide_enabled = glide_en; _glide_climbout = glide_climb; }
 
 
 	// TECS status
@@ -310,9 +310,9 @@ private:
 	bool _states_initialized{false};					///< true when TECS states have been iniitalized
 	bool _in_air{false};						///< true when the vehicle is flying
 
-	// soaring variables
-	bool _soar_enabled{false};
-	bool _soar_climbout{false};
+	// glideing variables
+	bool _glide_enabled{false};
+	bool _glide_climbout{false};
 
 	/**
 	 * Update the airspeed internal state using a second order complementary filter
