@@ -47,7 +47,7 @@ px4_add_romfs_files(
 	2105_maja
 	2106_albatross
 	2200_mini_talon
-
+	2201_magellan
 	2507_cloudship
 
 	# [3000, 3999] Flying wing"

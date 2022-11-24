@@ -209,6 +209,13 @@ public:
 	float get_altitude_acceptance_radius();
 
 	/**
+	 * @brief Get the nav fw gliding status
+	 *
+	 * @return float
+	 */
+	float get_nav_fw_gliding();
+
+	/**
 	 * Get the cruising speed
 	 *
 	 * @return the desired cruising speed for this mission
@@ -445,6 +452,10 @@ private:
 		(ParamInt<px4::params::NAV_TRAFF_AVOID>)    _param_nav_traff_avoid,	/**< avoiding other aircraft is enabled */
 		(ParamFloat<px4::params::NAV_TRAFF_A_RADU>) _param_nav_traff_a_radu,	/**< avoidance Distance Unmanned*/
 		(ParamFloat<px4::params::NAV_TRAFF_A_RADM>) _param_nav_traff_a_radm,	/**< avoidance Distance Manned*/
+		(ParamFloat<px4::params::NAV_FW_GLIDE_EN>)   _param_nav_fw_glide_en,	/**< enable gliding*/
+		// (ParamFloat<px4::params::NAV_FW_GLIDE_MIN>)   _param_nav_fw_glide_min,	/**< minimum glide altitude*/
+		// (ParamFloat<px4::params::NAV_FW_GLIDE_CLB>)   _param_nav_fw_glide_climb,	/**< gliding climbout altitude*/
+		// (ParamFloat<px4::params::NAV_FW_GLIDE_ACC>)   _param_nav_fw_glide_acc,	/**< gliding climbout altitude acceptance*/
 
 		// non-navigator parameters
 		// Mission (MIS_*)

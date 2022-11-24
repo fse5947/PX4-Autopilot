@@ -259,20 +259,25 @@ void Navigator::run()
 					rep->previous.lon = get_global_position()->lon;
 					rep->previous.alt = get_global_position()->alt;
 
-
-					rep->current.type = position_setpoint_s::SETPOINT_TYPE_LOITER;
+					if (cmd.param3 >= 1.0f) {
+						rep->current.type = position_setpoint_s::SETPOINT_TYPE_POSITION;
+					} else {
+						rep->current.type = position_setpoint_s::SETPOINT_TYPE_LOITER;
+					}
 
 					bool only_alt_change_requested = false;
 
-					// If no argument for ground speed, use default value.
-					if (cmd.param1 <= 0 || !PX4_ISFINITE(cmd.param1)) {
-						rep->current.cruising_speed = get_cruising_speed();
+					// If no argument for ground speed, use default value. MODIFIED
+					if (cmd.param1 < 0 || !PX4_ISFINITE(cmd.param1)) {
+						rep->current.cruising_throttle = get_cruising_throttle();
+						// set_cruising_throttle(cmd.param1);
 
 					} else {
-						rep->current.cruising_speed = cmd.param1;
+						rep->current.cruising_throttle = cmd.param1 / 100;
+						set_cruising_throttle(cmd.param1 / 100);
 					}
 
-					rep->current.cruising_throttle = get_cruising_throttle();
+					rep->current.cruising_speed = get_cruising_speed();
 					rep->current.acceptance_radius = get_acceptance_radius();
 
 					// Go on and check which changes had been requested
@@ -379,6 +384,16 @@ void Navigator::run()
 					if (PX4_ISFINITE(cmd.param1)) {
 						rep->current.loiter_radius = fabsf(cmd.param1);
 						rep->current.loiter_direction = math::signNoZero(cmd.param1);
+					}
+
+
+					if (cmd.param4 < 0 || !PX4_ISFINITE(cmd.param4)) {
+						rep->current.cruising_throttle = get_cruising_throttle();
+						// set_cruising_throttle(cmd.param1);
+
+					} else {
+						rep->current.cruising_throttle = cmd.param4 / 100;
+						set_cruising_throttle(cmd.param4 / 100);
 					}
 
 					rep->current.lat = position_setpoint.lat;
@@ -983,6 +998,11 @@ void Navigator::publish_position_setpoint_triplet()
 float Navigator::get_default_acceptance_radius()
 {
 	return _param_nav_acc_rad.get();
+}
+
+float Navigator::get_nav_fw_gliding()
+{
+	return _param_nav_fw_glide_en.get();
 }
 
 float Navigator::get_default_altitude_acceptance_radius()

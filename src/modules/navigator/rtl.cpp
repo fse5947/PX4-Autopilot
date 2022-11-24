@@ -723,7 +723,7 @@ void RTL::calc_and_pub_rtl_time_estimate()
 
 	// Calculate RTL time estimate only when there is a valid home position
 	// TODO: Also check if vehicle position is valid
-	if (!_navigator->home_global_position_valid()) {
+	if (!_navigator->home_global_position_valid() || true) {
 		rtl_time_estimate.valid = false;
 
 	} else {

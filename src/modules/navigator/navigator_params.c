@@ -198,3 +198,56 @@ PARAM_DEFINE_FLOAT(NAV_AH_ALT, 600.0f);
  * @group Mission
  */
 PARAM_DEFINE_INT32(NAV_FORCE_VT, 1);
+
+/**
+ * Soaring Enabled
+ *
+ * This parameter allows us to enable gliding flight in auto mode
+ *
+ * @min 0.0
+ * @max 2.0
+ * @decimal 1
+ * @increment 1.0
+ * @group Mission
+ */
+PARAM_DEFINE_FLOAT(NAV_FW_GLIDE_EN, 0.0f);
+
+/**
+ * Minimum Soaring Altitude
+ *
+ * Minimum altitude in soaring state at which the motor will turn back on and the aircraft will climb in altitude
+ *
+ * @min 25.0
+ * @max 75.0
+ * @decimal 1
+ * @increment 1.0
+ * @group Mission
+ */
+PARAM_DEFINE_FLOAT(NAV_FW_GLIDE_MIN, 25.0f);
+
+/**
+ * Soaring Climbout Altitude
+ *
+ * Altitude to which aircraft will climb out of a glide state
+ *
+ * @min 50.0
+ * @max 200.0
+ * @decimal 1
+ * @increment 1.0
+ * @group Mission
+ */
+PARAM_DEFINE_FLOAT(NAV_FW_GLIDE_CLB, 50.0f);
+
+/**
+ * Soaring Climbout Altitude Acceptance
+ *
+ * Altitude acceptance radius at which aircraft will be assumed to have achieved climbout altitude
+ *
+ * @min 0.0
+ * @max 50.0
+ * @decimal 1
+ * @increment 1.0
+ * @group Mission
+ */
+PARAM_DEFINE_FLOAT(NAV_FW_GLIDE_ACC, 5.0f);
+
