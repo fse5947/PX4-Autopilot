@@ -536,7 +536,7 @@ private:
 
 		(ParamFloat<px4::params::NAV_FW_ALT_RAD>) _param_nav_fw_alt_rad,
 
-		(ParamFloat<px4::params::NAV_FW_GLIDE_EN>) _param_nav_fw_glide_en,
+		(ParamBool<px4::params::NAV_FW_GLIDE_EN>) _param_nav_fw_glide_en,
 
 		(ParamFloat<px4::params::NAV_FW_GLIDE_MIN>) _param_nav_fw_glide_min,
 

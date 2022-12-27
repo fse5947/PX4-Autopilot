@@ -1067,10 +1067,10 @@ FixedwingPositionControl::handle_setpoint_type(const uint8_t setpoint_type, cons
 
 		float loiter_radius_abs = fabsf(_param_nav_loiter_rad.get());
 
-		float param_glide = _param_nav_fw_glide_en.get();
+		bool param_glide = _param_nav_fw_glide_en.get();
 
 		if (climbout_alt <= glide_min_alt) {
-			param_glide = 0.0f;
+			param_glide = false;
 		}
 
 		if (fabsf(pos_sp_curr.loiter_radius) > FLT_EPSILON) {
@@ -1081,7 +1081,7 @@ FixedwingPositionControl::handle_setpoint_type(const uint8_t setpoint_type, cons
 			// POSITION: achieve position setpoint altitude via loiter
 			// close to waypoint, but altitude error greater than twice acceptance
 			if ((!_vehicle_status.in_transition_mode) && (dist >= 0.f)
-			    && ((dist_z > _param_nav_fw_alt_rad.get()) && param_glide < 1.0f && !glide_enable)
+			    && ((dist_z > _param_nav_fw_alt_rad.get()) && !param_glide && !glide_enable)
 			    && (dist_xy < 2.f * math::max(acc_rad, loiter_radius_abs))) {
 				// SETPOINT_TYPE_POSITION -> SETPOINT_TYPE_LOITER
 				position_sp_type = position_setpoint_s::SETPOINT_TYPE_LOITER;
@@ -1138,13 +1138,13 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 	climbout_alt = _param_nav_fw_glide_climb.get();
 	climbout_acc = _param_nav_fw_glide_acc.get();
 
-	float param_glide = _param_nav_fw_glide_en.get();
+	bool param_glide = _param_nav_fw_glide_en.get();
 
 	if (climbout_alt <= glide_min_alt) {
-		param_glide = 0.0f;
+		param_glide = false;
 	}
 
-	if (param_glide >= 1.0f) {
+	if (param_glide) {
 		if (-_local_pos.z <= glide_min_alt || (glide_climbout && -_local_pos.z <= (climbout_alt - climbout_acc))) {
 			if (!glide_climbout) {
 				_glide_climbout_wp_local = Vector2f{_local_pos.x, _local_pos.y};
@@ -1287,13 +1287,13 @@ FixedwingPositionControl::control_auto_velocity(const hrt_abstime &now, const fl
 	climbout_alt = _param_nav_fw_glide_climb.get();
 	climbout_acc = _param_nav_fw_glide_acc.get();
 
-	float param_glide = _param_nav_fw_glide_en.get();
+	bool param_glide = _param_nav_fw_glide_en.get();
 
 	if (climbout_alt <= glide_min_alt) {
-		param_glide = 0.0f;
+		param_glide = false;
 	}
 
-	if (param_glide >= 1.0f) {
+	if (param_glide) {
 		if (-_local_pos.z <= glide_min_alt || (glide_climbout && -_local_pos.z <= (climbout_alt - climbout_acc))) {
 			if (!glide_climbout) {
 				_glide_climbout_wp_local = Vector2f{_local_pos.x, _local_pos.y};
@@ -1418,13 +1418,13 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 	climbout_alt = _param_nav_fw_glide_climb.get();
 	climbout_acc = _param_nav_fw_glide_acc.get();
 
-	float param_glide = _param_nav_fw_glide_en.get();
+	bool param_glide = _param_nav_fw_glide_en.get();
 
 	if (climbout_alt <= glide_min_alt || (pos_sp_next.type == position_setpoint_s::SETPOINT_TYPE_LAND && pos_sp_next.valid)) {
-		param_glide = 0.0f;
+		param_glide = false;
 	}
 
-	if (param_glide >= 1.0f) {
+	if (param_glide) {
 		if (-_local_pos.z <= glide_min_alt || (glide_climbout && -_local_pos.z <= (climbout_alt - climbout_acc))) {
 			glide_enable = false;
 			glide_climbout = true;
