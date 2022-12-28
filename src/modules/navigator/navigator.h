@@ -209,7 +209,7 @@ public:
 	float get_altitude_acceptance_radius();
 
 	/**
-	 * @brief Get the nav fw gliding status
+	 * @brief Get FW gliding status (Enabled or Disabled)
 	 *
 	 * @return bool
 	 */
