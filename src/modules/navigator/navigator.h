@@ -213,7 +213,7 @@ public:
 	 *
 	 * @return bool
 	 */
-	bool get_nav_fw_gliding();
+	bool get_nav_fw_gliding_en();
 
 	/**
 	 * Get the cruising speed
