@@ -204,13 +204,10 @@ PARAM_DEFINE_INT32(NAV_FORCE_VT, 1);
  *
  * This parameter allows us to enable gliding flight in auto mode
  *
- * @min 0.0
- * @max 2.0
- * @decimal 1
- * @increment 1.0
+ * @boolean
  * @group Mission
  */
-PARAM_DEFINE_FLOAT(NAV_FW_GLIDE_EN, 0.0f);
+PARAM_DEFINE_INT32(NAV_FW_GLIDE_EN, 0);
 
 /**
  * Minimum Soaring Altitude

@@ -1000,7 +1000,7 @@ float Navigator::get_default_acceptance_radius()
 	return _param_nav_acc_rad.get();
 }
 
-float Navigator::get_nav_fw_gliding()
+bool Navigator::get_nav_fw_gliding_en()
 {
 	return _param_nav_fw_glide_en.get();
 }

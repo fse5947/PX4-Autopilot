@@ -340,7 +340,7 @@ MissionBlock::is_mission_item_reached()
 				}
 			}
 
-			if (dist_xy >= 0.0f && (dist_xy <= acceptance_radius || passed_curr_wp) && (dist_z <= alt_acc_rad_m || _navigator->get_nav_fw_gliding() >= 1.0f)) {
+			if (dist_xy >= 0.0f && (dist_xy <= acceptance_radius || passed_curr_wp) && (dist_z <= alt_acc_rad_m || _navigator->get_nav_fw_gliding_en())) {
 				_waypoint_position_reached = true;
 			}
 		}
