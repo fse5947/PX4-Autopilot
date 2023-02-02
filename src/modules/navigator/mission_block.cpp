@@ -127,6 +127,7 @@ MissionBlock::is_mission_item_reached()
 
 	case NAV_CMD_DO_CHANGE_SPEED:
 	case NAV_CMD_DO_SET_HOME:
+	case NAV_CMD_DO_SET_PARAMETER:
 		return true;
 
 	default:
