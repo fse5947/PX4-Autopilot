@@ -520,6 +520,7 @@ void Navigator::run()
 				if (param == PARAM_INVALID) {
 					PX4_ERR("unknown param: %i", (int)cmd.param1);
 
+				//! Mavlink warning to be implemented
 				/*}else if (!((param_type(param) == PARAM_TYPE_INT32 && cmd.param2 == PARAM_TYPE_INT32) ||
 					     (param_type(param) == PARAM_TYPE_FLOAT && cmd.param2 == PARAM_TYPE_FLOAT))) {
 					PX4_ERR("param types mismatch param: %i", cmd.param1);
