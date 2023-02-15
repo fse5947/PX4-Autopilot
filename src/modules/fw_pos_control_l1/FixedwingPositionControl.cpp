@@ -1506,10 +1506,8 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 
 	float alt_sp = pos_sp_curr.alt;
 
-	if (glide_climbout){
-		alt_sp = climbout_alt + _local_pos.ref_alt;
 	// if (glide_climbout){
-	// 	alt_sp = climbout_alt + _local_pos.ref_alt;
+		// alt_sp = climbout_alt + _local_pos.ref_alt;
 	// }
 
 	if (in_takeoff_situation()) {
