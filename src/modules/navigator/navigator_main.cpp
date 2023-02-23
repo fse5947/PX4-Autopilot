@@ -509,6 +509,34 @@ void Navigator::run()
 				// TODO: handle responses for supported DO_CHANGE_SPEED options?
 				publish_vehicle_command_ack(cmd, vehicle_command_s::VEHICLE_CMD_RESULT_ACCEPTED);
 
+			} else if(cmd.command == vehicle_command_s::VEHICLE_CMD_DO_SET_PARAMETER){
+				PX4_WARN("SET PARAMETER Mission Item");
+				param_t param = param_for_index(cmd.param1);
+				if (param == PARAM_INVALID) {
+					PX4_ERR("unknown param: %i", (int)cmd.param1);
+				} else {
+					switch (param_type(param)) {
+					case PARAM_TYPE_INT32: {
+						int32_t new_value = cmd.param2;
+						int32_t old_value = 0;
+						param_get(param, &old_value);
+						param_set(param, &new_value);
+						PX4_WARN("parameter: %s changed from %f to %f", param_name(param), (double)old_value, (double)cmd.param2);
+						}
+						break;
+
+					case PARAM_TYPE_FLOAT: {
+						float new_value = cmd.param2;
+						float old_value = 0;
+						param_get(param, &old_value);
+						param_set(param, &new_value);
+						PX4_WARN("parameter: %s changed from %f to %f", param_name(param), (double)old_value, (double)cmd.param2);
+						}
+						break;
+					}
+				}
+
+
 			} else if (cmd.command == vehicle_command_s::VEHICLE_CMD_DO_SET_ROI
 				   || cmd.command == vehicle_command_s::VEHICLE_CMD_NAV_ROI
 				   || cmd.command == vehicle_command_s::VEHICLE_CMD_DO_SET_ROI_LOCATION
