@@ -1144,6 +1144,8 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 		param_glide_en = false;
 	}
 
+	const bool prev_glide_climbout = glide_climbout;
+
 	if (param_glide_en) {
 		if (-_local_pos.z <= glide_min_alt || (glide_climbout && -_local_pos.z <= (climbout_alt - climbout_acc))) {
 			if (!glide_climbout) {
@@ -1151,17 +1153,17 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 			}
 			glide_enable = false;
 			glide_climbout = true;
-			_l1_control.navigate_loiter(_glide_climbout_wp_local, curr_pos_local, _param_nav_loiter_rad.get(), 1,
-					    get_nav_speed_2d(ground_speed));
-			_att_sp.roll_body = _l1_control.get_roll_setpoint();
 		} else {
 			glide_enable = true;
 			glide_climbout = false;
-			_att_sp.roll_reset_integral = true;
 		}
 	} else {
 		glide_enable = false;
 		glide_climbout = false;
+	}
+
+	if (prev_glide_climbout && !glide_climbout){
+		_att_sp.roll_reset_integral = true;
 	}
 
 	if (PX4_ISFINITE(pos_sp_curr.cruising_throttle) &&
@@ -1251,7 +1253,11 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 		if (!glide_climbout) {
 			_l1_control.navigate_waypoints(prev_wp_local, curr_wp_local, curr_pos_local, get_nav_speed_2d(ground_speed));
 			_att_sp.roll_body = _l1_control.get_roll_setpoint();
+		} else {
+			_l1_control.navigate_loiter(_glide_climbout_wp_local, curr_pos_local, _param_nav_loiter_rad.get(), 1,
+					    get_nav_speed_2d(ground_speed));
 		}
+		_att_sp.roll_body = _l1_control.get_roll_setpoint();
 	}
 
 	_tecs.set_glide_variables(glide_enable, glide_climbout);
