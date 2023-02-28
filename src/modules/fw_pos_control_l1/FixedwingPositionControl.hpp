@@ -501,7 +501,7 @@ private:
 		(ParamFloat<px4::params::FW_T_SINK_MIN>) _param_fw_t_sink_min,
 		(ParamFloat<px4::params::FW_T_SPD_OMEGA>) _param_fw_t_spd_omega,
 		(ParamFloat<px4::params::FW_T_SPDWEIGHT>) _param_fw_t_spdweight,
-		(ParamFloat<px4::params::FW_T_TAS_TC>) _param_fw_t_tas_error_tc,
+		(ParamFloat<px4::params::AA_T_TAS_TC>) _param_fw_t_tas_error_tc,
 		(ParamFloat<px4::params::FW_T_THR_DAMP>) _param_fw_t_thr_damp,
 		(ParamFloat<px4::params::FW_T_VERT_ACC>) _param_fw_t_vert_acc,
 		(ParamFloat<px4::params::FW_T_STE_R_TC>) _param_ste_rate_time_const,
@@ -536,11 +536,11 @@ private:
 
 		(ParamFloat<px4::params::NAV_FW_ALT_RAD>) _param_nav_fw_alt_rad,
 
-		(ParamBool<px4::params::NAV_FW_GLIDE_EN>) _param_nav_fw_glide_en,
+		(ParamBool<px4::params::AA_GLIDE_EN>) _param_AA_GLIDE_EN,
 
 		(ParamFloat<px4::params::NAV_FW_GLIDE_MIN>) _param_nav_fw_glide_min,
 
-		(ParamFloat<px4::params::NAV_FW_GLIDE_CLB>) _param_nav_fw_glide_climb,
+		(ParamFloat<px4::params::AA_GLIDE_CLB>) _param_nav_fw_glide_climb,
 
 		(ParamFloat<px4::params::NAV_FW_GLIDE_ACC>) _param_nav_fw_glide_acc
 

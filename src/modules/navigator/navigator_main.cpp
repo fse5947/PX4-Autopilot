@@ -387,7 +387,7 @@ void Navigator::run()
 					}
 
 
-					if (cmd.param4 < 0 || !PX4_ISFINITE(cmd.param4)) {
+				if (cmd.param4 < 0 || !PX4_ISFINITE(cmd.param4)) {
 						rep->current.cruising_throttle = get_cruising_throttle();
 						// set_cruising_throttle(cmd.param1);
 
@@ -1030,7 +1030,7 @@ float Navigator::get_default_acceptance_radius()
 
 bool Navigator::get_nav_fw_gliding_en()
 {
-	return _param_nav_fw_glide_en.get();
+	return _param_AA_GLIDE_EN.get();
 }
 
 float Navigator::get_default_altitude_acceptance_radius()

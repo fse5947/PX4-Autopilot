@@ -207,7 +207,7 @@ PARAM_DEFINE_INT32(NAV_FORCE_VT, 1);
  * @boolean
  * @group Mission
  */
-PARAM_DEFINE_INT32(NAV_FW_GLIDE_EN, 0);
+PARAM_DEFINE_INT32(AA_GLIDE_EN, 0);
 
 /**
  * Minimum Soaring Altitude
@@ -233,7 +233,7 @@ PARAM_DEFINE_FLOAT(NAV_FW_GLIDE_MIN, 25.0f);
  * @increment 1.0
  * @group Mission
  */
-PARAM_DEFINE_FLOAT(NAV_FW_GLIDE_CLB, 50.0f);
+PARAM_DEFINE_FLOAT(AA_GLIDE_CLB, 50.0f);
 
 /**
  * Soaring Climbout Altitude Acceptance

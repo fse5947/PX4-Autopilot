@@ -1067,7 +1067,7 @@ FixedwingPositionControl::handle_setpoint_type(const uint8_t setpoint_type, cons
 
 		float loiter_radius_abs = fabsf(_param_nav_loiter_rad.get());
 
-		bool param_glide_en = _param_nav_fw_glide_en.get();
+		bool param_glide_en = _param_AA_GLIDE_EN.get();
 
 		if (climbout_alt <= glide_min_alt) {
 			param_glide_en = false;
@@ -1138,7 +1138,7 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 	climbout_alt = _param_nav_fw_glide_climb.get();
 	climbout_acc = _param_nav_fw_glide_acc.get();
 
-	bool param_glide_en = _param_nav_fw_glide_en.get();
+	bool param_glide_en = _param_AA_GLIDE_EN.get();
 
 	if (climbout_alt <= glide_min_alt || _vehicle_status.nav_state != vehicle_status_s::NAVIGATION_STATE_AUTO_MISSION) {
 		param_glide_en = false;
@@ -1287,7 +1287,7 @@ FixedwingPositionControl::control_auto_velocity(const hrt_abstime &now, const fl
 	climbout_alt = _param_nav_fw_glide_climb.get();
 	climbout_acc = _param_nav_fw_glide_acc.get();
 
-	bool param_glide_en = _param_nav_fw_glide_en.get();
+	bool param_glide_en = _param_AA_GLIDE_EN.get();
 
 	if (climbout_alt <= glide_min_alt) {
 		param_glide_en = false;
@@ -1418,7 +1418,7 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 	// climbout_alt = _param_nav_fw_glide_climb.get();
 	// climbout_acc = _param_nav_fw_glide_acc.get();
 
-	// bool param_glide_en = _param_nav_fw_glide_en.get();
+	// bool param_glide_en = _param_AA_GLIDE_EN.get();
 
 	// if (climbout_alt <= glide_min_alt || (pos_sp_next.type == position_setpoint_s::SETPOINT_TYPE_LAND && pos_sp_next.valid)) {
 	// 	param_glide_en = false;

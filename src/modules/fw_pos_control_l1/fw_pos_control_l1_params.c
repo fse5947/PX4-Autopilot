@@ -867,7 +867,7 @@ PARAM_DEFINE_FLOAT(FW_T_HRATE_FF, 0.3f);
  * @increment 0.5
  * @group FW TECS
  */
-PARAM_DEFINE_FLOAT(FW_T_TAS_TC, 5.0f);
+PARAM_DEFINE_FLOAT(AA_T_TAS_TC, 5.0f);
 
 /**
  * Minimum groundspeed

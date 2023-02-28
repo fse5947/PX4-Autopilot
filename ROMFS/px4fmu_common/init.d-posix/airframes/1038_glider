@@ -32,7 +32,7 @@ param set-default FW_YR_I 0.4
 param set-default FW_YR_P 0.03
 
 # Gliding
-param set-default NAV_FW_GLIDE_CLB 501.0
+param set-default AA_GLIDE_CLB 501.0
 
 
 set MIXER_FILE etc/mixers-sitl/plane_sitl.main.mix
