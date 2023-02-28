@@ -492,7 +492,11 @@ void Navigator::run()
 			} else if (cmd.command == vehicle_command_s::VEHICLE_CMD_DO_CHANGE_SPEED) {
 				if (cmd.param2 > FLT_EPSILON) {
 					// XXX not differentiating ground and airspeed yet
-					set_cruising_speed(cmd.param2);
+					if (cmd.param4 > FLT_EPSILON) {
+						set_cruising_speed(get_cruising_speed() + cmd.param2);
+					} else {
+						set_cruising_speed(cmd.param2);
+					}
 
 				} else {
 					set_cruising_speed();
