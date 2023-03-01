@@ -144,7 +144,10 @@
                 "env": {
                     "GAZEBO_PLUGIN_PATH": "${workspaceFolder}/build/px4_sitl_default/build_gazebo",
                     "GAZEBO_MODEL_PATH": "${workspaceFolder}/Tools/sitl_gazebo/models",
-                    "PX4_SIM_SPEED_FACTOR": "1"
+                    "PX4_SIM_SPEED_FACTOR": "1",
+                    "PX4_HOME_LAT": "32.0896031",
+                    "PX4_HOME_LON": "34.9275808",
+                    "PX4_HOME_ALT": "40"
                 }
             },
             "command": "gzserver --verbose ${workspaceFolder}/Tools/sitl_gazebo/worlds/${input:gazeboWorld}.world",
@@ -346,6 +349,7 @@
               "plane_catapult",
               "plane_lidar",
               "standard_vtol",
+              "glider",
               "tailsitter",
               "tiltrotor",
               "r1_rover",
