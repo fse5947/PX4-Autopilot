@@ -207,10 +207,10 @@ private:
 	bool _landed{true};
 
 	/* Gliding */
-	bool glide_enable{false};
-	bool glide_climbout{false};
-	float glide_min_alt{25.0f};
-	float climbout_alt{150.0f};
+	bool _glide_enable{false};
+	bool _glide_climbout{false};
+	float _glide_min_alt{25.0f};
+	float _climbout_alt{150.0f};
 	float climbout_acc{5.0f};
 	Vector2f _glide_climbout_wp_local {};
 	Vector2d _glide_climbout_wp {};
