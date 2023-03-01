@@ -502,6 +502,9 @@ FixedwingPositionControl::tecs_status_publish()
 	case TECS::ECL_TECS_MODE_CLIMBOUT:
 		t.mode = tecs_status_s::TECS_MODE_CLIMBOUT;
 		break;
+	case TECS::ECL_TECS_MODE_GLIDE:
+		t.mode = tecs_status_s::TECS_MODE_GLIDE;
+		break;
 	}
 
 	t.altitude_sp = _tecs.hgt_setpoint();

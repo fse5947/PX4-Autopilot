@@ -621,6 +621,8 @@ void TECS::update_pitch_throttle(float pitch, float baro_altitude, float hgt_set
 	} else if (_climbout_mode_active) {
 		_tecs_mode = ECL_TECS_MODE_CLIMBOUT;
 
+	} else if (_glide_enabled) {
+		_tecs_mode = ECL_TECS_MODE_GLIDE;
 	} else {
 		// This is the default operation mode
 		_tecs_mode = ECL_TECS_MODE_NORMAL;

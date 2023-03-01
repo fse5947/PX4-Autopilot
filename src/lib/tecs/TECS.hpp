@@ -102,7 +102,8 @@ public:
 		ECL_TECS_MODE_NORMAL = 0,
 		ECL_TECS_MODE_UNDERSPEED,
 		ECL_TECS_MODE_BAD_DESCENT,
-		ECL_TECS_MODE_CLIMBOUT
+		ECL_TECS_MODE_CLIMBOUT,
+		ECL_TECS_MODE_GLIDE
 	};
 
 	void set_detect_underspeed_enabled(bool enabled) { _detect_underspeed_enabled = enabled; }
