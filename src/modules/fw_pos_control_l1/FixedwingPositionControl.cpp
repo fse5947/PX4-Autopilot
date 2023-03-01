@@ -1154,8 +1154,24 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 			glide_enable = false;
 			glide_climbout = true;
 		} else {
-			glide_enable = true;
-			glide_climbout = false;
+			bool enable_glide = true;
+			if (glide_climbout) {
+				//! Should start going to wp when altitude is reached
+				const float yaw = get_bearing_to_next_waypoint((double)curr_pos(0), (double)curr_pos(1),
+					      (double)curr_wp(0), (double)curr_wp(1));
+				const float cog = atan2f(ground_speed(1), ground_speed(0));
+				const float yaw_err = wrap_pi(yaw - cog);
+
+				if ((double)fabsf(yaw_err) > math::radians(45.0))
+				{
+					enable_glide = false;
+				}
+			}
+
+			if (enable_glide) {
+				glide_enable = true;
+				glide_climbout = false;
+			}
 		}
 	} else {
 		glide_enable = false;
