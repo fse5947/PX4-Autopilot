@@ -1015,7 +1015,7 @@ FixedwingPositionControl::control_auto_descend(const hrt_abstime &now)
 	// but not letting it drift too far away.
 	const float descend_rate = -0.5f;
 
-	_tecs.set_glide_variables(false, false);
+	_tecs.set_glide_variables(false);
 
 	tecs_update_pitch_throttle(now, _current_altitude,
 				   _param_fw_airspd_trim.get(),
@@ -1383,7 +1383,7 @@ FixedwingPositionControl::control_auto_velocity(const hrt_abstime &now, const fl
 
 	_att_sp.apply_flaps = vehicle_attitude_setpoint_s::FLAPS_OFF;
 
-	_tecs.set_glide_variables(_glide_enable, _glide_climbout);
+	_tecs.set_glide_variables(_glide_enabled);
 
 	tecs_update_pitch_throttle(now, position_sp_alt,
 				   target_airspeed,
@@ -1550,7 +1550,7 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 		_tecs.set_height_error_time_constant(_param_fw_thrtc_sc.get() * _param_fw_t_h_error_tc.get());
 	}
 
-	// _tecs.set_glide_variables(glide_enable, glide_climbout);
+	// _tecs.set_glide_variables(glide_enable);
 
 	tecs_update_pitch_throttle(now, alt_sp,
 				   target_airspeed,
@@ -1749,7 +1749,7 @@ FixedwingPositionControl::control_auto_takeoff(const hrt_abstime &now, const Vec
 			const float takeoff_pitch_max_deg = _launchDetector.getPitchMax(_param_fw_p_lim_max.get());
 			const float altitude_error = pos_sp_curr.alt - _current_altitude;
 
-			_tecs.set_glide_variables(false, false);
+			_tecs.set_glide_variables(false);
 
 			/* apply minimum pitch and limit roll if target altitude is not within climbout_diff meters */
 			if (_param_fw_clmbout_diff.get() > 0.0f && altitude_error > _param_fw_clmbout_diff.get()) {
@@ -2064,7 +2064,7 @@ FixedwingPositionControl::control_auto_landing(const hrt_abstime &now, const Vec
 			_att_sp.yaw_body = _yaw; // yaw is not controlled, so set setpoint to current yaw
 		}
 
-		_tecs.set_glide_variables(false, false);
+		_tecs.set_glide_variables(false);
 
 		tecs_update_pitch_throttle(now, terrain_alt + flare_curve_alt_rel,
 					   target_airspeed,
@@ -2168,7 +2168,7 @@ FixedwingPositionControl::control_auto_landing(const hrt_abstime &now, const Vec
 
 		_att_sp.yaw_body = _yaw; // yaw is not controlled, so set setpoint to current yaw
 
-		_tecs.set_glide_variables(false, false);
+		_tecs.set_glide_variables(false);
 
 		tecs_update_pitch_throttle(now, altitude_desired,
 					   target_airspeed,
@@ -2226,7 +2226,7 @@ FixedwingPositionControl::control_manual_altitude(const hrt_abstime &now, const 
 		throttle_max = 0.0f;
 	}
 
-	_tecs.set_glide_variables(false, false);
+	_tecs.set_glide_variables(false);
 
 	tecs_update_pitch_throttle(now, altitude_sp_amsl,
 				   altctrl_airspeed,
@@ -2362,7 +2362,7 @@ FixedwingPositionControl::control_manual_position(const hrt_abstime &now, const 
 		}
 	}
 
-	_tecs.set_glide_variables(false, false);
+	_tecs.set_glide_variables(false);
 
 	tecs_update_pitch_throttle(now, altitude_sp_amsl,
 				   target_airspeed,

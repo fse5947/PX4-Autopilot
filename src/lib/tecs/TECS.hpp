@@ -140,7 +140,7 @@ public:
 
 	void set_seb_rate_ff_gain(float ff_gain) { _SEB_rate_ff = ff_gain; }
 
-	void set_glide_variables(bool glide_en, bool glide_climb) { _glide_enabled = glide_en; _glide_climbout = glide_climb; }
+	void set_glide_variables(bool glide_en) { _prev_glide_enable=_glide_enabled; _glide_enabled = glide_en;}
 
 
 	// TECS status
@@ -312,7 +312,7 @@ private:
 
 	// glideing variables
 	bool _glide_enabled{false};
-	bool _glide_climbout{false};
+	bool _prev_glide_enable{false};
 
 	/**
 	 * Update the airspeed internal state using a second order complementary filter

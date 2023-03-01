@@ -181,10 +181,6 @@ void TECS::runAltitudeControllerSmoothVelocity(float alt_sp_amsl_m, float target
 	target_climbrate_m_s = math::min(target_climbrate_m_s, _max_climb_rate);
 	target_sinkrate_m_s = math::min(target_sinkrate_m_s, _max_sink_rate);
 
-	if (_glide_enabled) {
-		alt_sp_amsl_m = alt_amsl;
-	}
-
 	const float delta_trajectory_to_target_m = alt_sp_amsl_m - _alt_control_traj_generator.getCurrentPosition();
 
 	float height_rate_target = math::signNoZero<float>(delta_trajectory_to_target_m) *
@@ -225,6 +221,10 @@ void TECS::_update_energy_estimates()
 	_SPE_setpoint = _hgt_setpoint * CONSTANTS_ONE_G; // potential energy
 	_SKE_setpoint = 0.5f * _TAS_setpoint_adj * _TAS_setpoint_adj; // kinetic energy
 
+	// Calculate specific energies in units of (m**2/sec**2)
+	_SPE_estimate = _vert_pos_state * CONSTANTS_ONE_G; // potential energy
+	_SKE_estimate = 0.5f * _tas_state * _tas_state; // kinetic energy
+
 	// Calculate total energy error
 	_STE_error = _SPE_setpoint - _SPE_estimate + _SKE_setpoint - _SKE_estimate;
 
@@ -234,12 +234,10 @@ void TECS::_update_energy_estimates()
 	_SEB_error = SEB_setpoint() - (_SPE_estimate * _SPE_weighting - _SKE_estimate * _SKE_weighting);
 
 	// Calculate specific energy rate demands in units of (m**2/sec**3)
+	//! _hgt_rate_setpoint is not 0 in glide
 	_SPE_rate_setpoint = _hgt_rate_setpoint * CONSTANTS_ONE_G; // potential energy rate of change
 	_SKE_rate_setpoint = _tas_state * _TAS_rate_setpoint; // kinetic energy rate of change
 
-	// Calculate specific energies in units of (m**2/sec**2)
-	_SPE_estimate = _vert_pos_state * CONSTANTS_ONE_G; // potential energy
-	_SKE_estimate = 0.5f * _tas_state * _tas_state; // kinetic energy
 
 	// Calculate specific energy rates in units of (m**2/sec**3)
 	_SPE_rate = _vert_vel_state * CONSTANTS_ONE_G; // potential energy rate of change
@@ -297,7 +295,7 @@ void TECS::_update_throttle_setpoint(const float throttle_cruise)
 		throttle_setpoint = constrain(throttle_setpoint, _throttle_setpoint_min, _throttle_setpoint_max);
 
 		if (airspeed_sensor_enabled()) {
-			if (_integrator_gain_throttle > 0.0f) {
+			if (_integrator_gain_throttle > 0.0f && !_glide_enabled) {
 				float integ_state_max = _throttle_setpoint_max - throttle_setpoint;
 				float integ_state_min = _throttle_setpoint_min - throttle_setpoint;
 
@@ -363,7 +361,7 @@ void TECS::_detect_uncommanded_descent()
 	// If total energy is very low and reducing, throttle is high, and we are not in an underspeed condition, then enter uncommanded descent recovery mode
 	const bool enter_mode = !_uncommanded_descent_recovery && !_underspeed_detected && (_STE_error > 200.0f)
 				&& (STE_rate < 0.0f)
-				&& (_last_throttle_setpoint >= _throttle_setpoint_max * 0.9f) && !_glide_enabled && !_glide_climbout;
+				&& (_last_throttle_setpoint >= _throttle_setpoint_max * 0.9f) && !_glide_enabled && _prev_glide_enable;
 
 	// If we enter an underspeed condition or recover the required total energy, then exit uncommanded descent recovery mode
 	const bool exit_mode = _uncommanded_descent_recovery && (_underspeed_detected || (_STE_error < 0.0f));
@@ -464,7 +462,8 @@ void TECS::_calculateHeightRateSetpoint(float altitude_sp_amsl, float height_rat
 
 	_velocity_control_traj_generator.setVelSpFeedback(_hgt_rate_setpoint);
 
-	if (input_is_height_rate) {
+	//! Should Check glide enable here
+	if (input_is_height_rate && !_glide_enabled) {
 		_velocity_control_traj_generator.setCurrentPositionEstimate(altitude_amsl);
 		_velocity_control_traj_generator.update(_dt, height_rate_sp);
 		_hgt_rate_setpoint = _velocity_control_traj_generator.getCurrentVelocity();
@@ -476,7 +475,7 @@ void TECS::_calculateHeightRateSetpoint(float altitude_sp_amsl, float height_rat
 	}
 
 
-	if (control_altitude) {
+	if (control_altitude && !_glide_enabled) {
 		runAltitudeControllerSmoothVelocity(altitude_sp_amsl, target_climbrate, target_sinkrate, altitude_amsl);
 
 	} else {
