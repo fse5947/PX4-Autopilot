@@ -53,6 +53,8 @@ param set-default PWM_MAIN_RATE 50
 #
 param set-default GPS_UBX_DYNMODEL 8
 
+param set AA_GLIDE_EN 0
+
 #
 # This is the gimbal pass mixer.
 #
