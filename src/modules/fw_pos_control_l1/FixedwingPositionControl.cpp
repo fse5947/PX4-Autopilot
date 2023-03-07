@@ -1191,7 +1191,7 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 			const float cog = atan2f(ground_speed(1), ground_speed(0));
 			const float yaw_err = wrap_pi(cog - yaw);
 
-			if ((double)yaw_err <= 0.75 * MATH_PI && (double)yaw_err >= -math::radians(145.0)) {
+			if ((double)yaw_err <= 0.75 * MATH_PI && (double)yaw_err >= -math::radians(135.0)) {
 				_do_climbout_loiter = false;
 			}
 
