@@ -1143,6 +1143,10 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 
 	bool param_glide_en = _param_AA_GLIDE_EN.get();
 
+	if (_climbout_alt < 0) {
+		_climbout_alt = pos_sp_curr.alt - _local_pos.ref_alt;
+	}
+
 	if (_climbout_alt <= _glide_min_alt || _vehicle_status.nav_state != vehicle_status_s::NAVIGATION_STATE_AUTO_MISSION) {
 		param_glide_en = false;
 	}

@@ -541,7 +541,7 @@ private:
 
 		(ParamFloat<px4::params::NAV_FW_GLIDE_MIN>) _param_nav_fw_glide_min,
 
-		(ParamFloat<px4::params::AA_GLIDE_CLB>) _param_nav_fw_glide_climb,
+		(ParamFloat<px4::params::NAV_FW_GLIDE_CLB>) _param_nav_fw_glide_climb,
 
 		(ParamFloat<px4::params::NAV_FW_GLIDE_ACC>) _param_nav_fw_glide_acc
 

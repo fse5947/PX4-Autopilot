@@ -233,7 +233,7 @@ PARAM_DEFINE_FLOAT(NAV_FW_GLIDE_MIN, 25.0f);
  * @increment 1.0
  * @group Mission
  */
-PARAM_DEFINE_FLOAT(AA_GLIDE_CLB, 50.0f);
+PARAM_DEFINE_FLOAT(NAV_FW_GLIDE_CLB, 50.0f);
 
 /**
  * Soaring Climbout Altitude Acceptance
