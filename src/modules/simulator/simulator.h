@@ -73,6 +73,7 @@
 #include <uORB/topics/vehicle_status.h>
 #include <uORB/topics/vehicle_command.h>
 #include <uORB/topics/vehicle_command_ack.h>
+#include <uORB/topics/battery_status.h>
 
 #include <random>
 
@@ -225,6 +226,7 @@ private:
 	void handle_message_optical_flow(const mavlink_message_t *msg);
 	void handle_message_rc_channels(const mavlink_message_t *msg);
 	void handle_message_vision_position_estimate(const mavlink_message_t *msg);
+	void handle_message_battery_status(const mavlink_message_t *msg);
 
 	void parameters_update(bool force);
 	void poll_for_MAVLink_messages();
@@ -246,6 +248,7 @@ private:
 	uORB::Publication<vehicle_global_position_s>	_gpos_ground_truth_pub{ORB_ID(vehicle_global_position_groundtruth)};
 	uORB::Publication<vehicle_local_position_s>	_lpos_ground_truth_pub{ORB_ID(vehicle_local_position_groundtruth)};
 	uORB::Publication<input_rc_s>			_input_rc_pub{ORB_ID(input_rc)};
+	uORB::Publication<battery_status_s>		_battery_pub{ORB_ID(battery_status)};
 
 	// HIL GPS
 	static constexpr int MAX_GPS = 3;
@@ -302,6 +305,10 @@ private:
 	DEFINE_PARAMETERS(
 		(ParamInt<px4::params::MAV_TYPE>) _param_mav_type,
 		(ParamInt<px4::params::MAV_SYS_ID>) _param_mav_sys_id,
-		(ParamInt<px4::params::MAV_COMP_ID>) _param_mav_comp_id
+		(ParamInt<px4::params::MAV_COMP_ID>) _param_mav_comp_id,
+		(ParamFloat<px4::params::BAT_CRIT_THR>) _param_bat_crit_thr,
+		(ParamFloat<px4::params::BAT_EMERGEN_THR>) _param_bat_emergen_thr,
+		(ParamFloat<px4::params::BAT_LOW_THR>) _param_bat_low_thr
+
 	)
 };
