@@ -210,9 +210,6 @@ private:
 	bool _glide_enabled{false};
 	bool _do_glide_climbout{false};
 	bool _do_climbout_loiter{false};
-	float _glide_min_alt{25.0f};
-	float _climbout_alt{150.0f};
-	float climbout_acc{5.0f};
 	Vector2f _glide_climbout_wp_local {};
 	Vector2d _glide_climbout_wp {};
 
