@@ -1147,11 +1147,12 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 	}
 
 
-	bool valid_altitude_config = climbout_alt - climbout_acc > glide_min_alt;
+	const bool valid_altitude_config = climbout_alt - climbout_acc > glide_min_alt;
+	const bool reached_climbout_alt = -_local_pos.z >= (climbout_alt - climbout_acc);
 	if (param_glide_en && valid_altitude_config && _vehicle_status.nav_state == vehicle_status_s::NAVIGATION_STATE_AUTO_MISSION) {
 		const bool disable_glide_alt = -_local_pos.z <= glide_min_alt;
 		const bool reached_loiter_alt = -_local_pos.z > (glide_min_alt + 10.0f);
-		const bool reached_climbout_alt =  -_local_pos.z >= (climbout_alt - climbout_acc);
+
 
 		if (disable_glide_alt) {
 			_do_glide_climbout = true;
@@ -1252,7 +1253,13 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 		}
 	}
 
-	float target_airspeed = get_auto_airspeed_setpoint(now, pos_sp_curr.cruising_speed, ground_speed, dt);
+	float target_airspeed = 0.0;
+	if (_do_glide_climbout && !reached_climbout_alt) {
+		target_airspeed = _param_fw_airspd_trim.get();
+	} else {
+		target_airspeed = get_auto_airspeed_setpoint(now, pos_sp_curr.cruising_speed, ground_speed, dt);
+	}
+
 	Vector2f curr_wp_local = _global_local_proj_ref.project(curr_wp(0), curr_wp(1));
 	Vector2f prev_wp_local = _global_local_proj_ref.project(prev_wp(0), prev_wp(1));
 
@@ -1421,7 +1428,7 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 	if (climbout_alt < 0) {
 		climbout_alt = pos_sp_curr.alt - _local_pos.ref_alt;
 	}
-	bool valid_altitude_config = climbout_alt - climbout_acc > glide_min_alt;
+	const bool valid_altitude_config = climbout_alt - climbout_acc > glide_min_alt;
 
 	if (param_glide_en && valid_altitude_config && _vehicle_status.nav_state == vehicle_status_s::NAVIGATION_STATE_AUTO_MISSION) {
 		const bool disable_glide_alt = -_local_pos.z <= glide_min_alt;
@@ -1507,6 +1514,7 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 
 	if (_do_glide_climbout){
 		alt_sp = climbout_alt + _local_pos.ref_alt;
+		target_airspeed = _param_fw_airspd_trim.get();
 	}
 
 	if (in_takeoff_situation()) {
