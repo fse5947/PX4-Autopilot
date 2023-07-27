@@ -152,6 +152,7 @@
               "plane_lidar",
               "standard_vtol",
               "glider",
+              "phoenix2400",
               "tailsitter",
               "tiltrotor",
               "r1_rover",

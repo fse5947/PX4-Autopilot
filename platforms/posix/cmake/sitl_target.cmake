@@ -147,6 +147,7 @@ set(models
 	boat
 	cloudship
 	glider
+	phoenix2400
 	if750a
 	iris
 	iris_ctrlalloc

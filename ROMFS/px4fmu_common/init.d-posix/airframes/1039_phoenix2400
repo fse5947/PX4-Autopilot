@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# @name Phoenix2400 SITL
+#
+
+# . ${R}etc/init.d-posix/airframes/1030_plane
+. ${R}etc/init.d/rc.fw_defaults
+
+# param set-default FW_THR_CRUISE 0.0
+# param set-default RWTO_TKOFF 0
+param set-default RWTO_TKOFF 1
+
+param set-default FW_T_CLMB_MAX 6.9
+param set-default FW_T_CLMB_R_SP 5
+param set-default FW_T_SINK_MAX 4.0
+
+# observed dynamics
+param set-default FW_AIRSPD_MAX 23.0
+param set-default FW_AIRSPD_MIN 8.0
+param set-default FW_AIRSPD_STALL 7.0
+
+# tuned params
+param set-default FW_PR_FF 0.17
+param set-default FW_PR_I 0.186
+param set-default FW_PR_P 0.159
+param set-default FW_P_TC 0.13
+param set-default FW_RR_FF 0.28
+param set-default FW_RR_I 0.175
+param set-default FW_RR_P 0.060
+param set-default FW_R_TC 0.15
+param set-default FW_YR_I 0.4
+param set-default FW_YR_P 0.03
+
+# Gliding
+param set-default NAV_FW_GLIDE_CLB 501.0
+
+
+set MIXER_FILE etc/mixers-sitl/plane_sitl.main.mix
+set MIXER custom
