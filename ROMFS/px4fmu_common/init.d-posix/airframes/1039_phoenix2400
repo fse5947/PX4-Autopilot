@@ -6,33 +6,44 @@
 # . ${R}etc/init.d-posix/airframes/1030_plane
 . ${R}etc/init.d/rc.fw_defaults
 
-# param set-default FW_THR_CRUISE 0.0
-# param set-default RWTO_TKOFF 0
 param set-default RWTO_TKOFF 1
 
-param set-default FW_T_CLMB_MAX 6.9
-param set-default FW_T_CLMB_R_SP 5
+param set-default FW_AIRSPD_MAX 30.0
+param set-default FW_AIRSPD_MIN 10.0
+param set-default FW_AIRSPD_STALL 8.0
+param set-default FW_AIRSPD_TRIM 13.0
+
+param set-default FW_GND_SPD_MIN 3.0
+
+param set-default FW_THR_MAX 1.0
+param set-default FW_THR_MIN 0.0
+param set-default FW_THR_IDLE 0.0
+
+# Based on FW_AIRSPD_TRIM 13.0
+param set-default FW_THR_CRUISE 0.55
+param set-default FW_T_CLMB_MAX 8.5
+param set-default FW_T_CLMB_R_SP 6
+param set-default FW_T_SINK_MIN 1.1
 param set-default FW_T_SINK_MAX 4.0
 
-# observed dynamics
-param set-default FW_AIRSPD_MAX 23.0
-param set-default FW_AIRSPD_MIN 8.0
-param set-default FW_AIRSPD_STALL 7.0
-
-# tuned params
-param set-default FW_PR_FF 0.17
-param set-default FW_PR_I 0.186
-param set-default FW_PR_P 0.159
-param set-default FW_P_TC 0.13
-param set-default FW_RR_FF 0.28
-param set-default FW_RR_I 0.175
-param set-default FW_RR_P 0.060
-param set-default FW_R_TC 0.15
-param set-default FW_YR_I 0.4
-param set-default FW_YR_P 0.03
+param set-default MIS_DIST_1WP 1500.0
+param set-default MIS_DIST_WPS 5000.0
 
 # Gliding
-param set-default NAV_FW_GLIDE_CLB 501.0
+param set-default NAV_FW_GLIDE_ACC 10.0
+param set-default NAV_FW_GLIDE_CLB -1.0
+
+# Autotuned params
+param set-default FW_PR_FF 0.1294
+param set-default FW_PR_I 0.187
+param set-default FW_PR_P 0.149
+param set-default FW_P_TC 0.109
+param set-default FW_RR_FF 0.2212
+param set-default FW_RR_I 0.1728
+param set-default FW_RR_P 0.0756
+param set-default FW_R_TC 0.1165
+param set-default FW_YR_I 0.4
+param set-default FW_YR_P 0.03
 
 
 set MIXER_FILE etc/mixers-sitl/plane_sitl.main.mix
