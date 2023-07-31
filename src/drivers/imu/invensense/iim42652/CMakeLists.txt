@@ -1,6 +1,6 @@
 ############################################################################
 #
-#   Copyright (c) 2021 PX4 Development Team. All rights reserved.
+#   Copyright (c) 2022 PX4 Development Team. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -30,16 +30,18 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 ############################################################################
-
 px4_add_module(
-	MODULE drivers__invensense__icp10100
-	MAIN icp10100
+	MODULE drivers__imu__invensense__iim42652
+	MAIN iim42652
 	COMPILE_FLAGS
+		${MAX_CUSTOM_OPT_LEVEL}
 	SRCS
-		Inven_Sense_ICP10100_registers.hpp
-		ICP10100.cpp
-		ICP10100.hpp
-		icp10100_main.cpp
+		iim42652_main.cpp
+		IIM42652.cpp
+		IIM42652.hpp
+		InvenSense_IIM42652_registers.hpp
 	DEPENDS
 		px4_work_queue
+		drivers_accelerometer
+		drivers_gyroscope
 	)
