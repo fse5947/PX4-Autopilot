@@ -69,55 +69,71 @@
  */
 #define REG(_reg)	(*(volatile uint32_t *)(PWMIN_TIMER_BASE + _reg))
 
-#define rCR1		REG(STM32_GTIM_CR1_OFFSET)
-#define rCR2		REG(STM32_GTIM_CR2_OFFSET)
-#define rSMCR		REG(STM32_GTIM_SMCR_OFFSET)
-#define rDIER		REG(STM32_GTIM_DIER_OFFSET)
-#define rSR		REG(STM32_GTIM_SR_OFFSET)
-#define rEGR		REG(STM32_GTIM_EGR_OFFSET)
-#define rCCMR1		REG(STM32_GTIM_CCMR1_OFFSET)
+#define rCR1		REG(STM32_GTIM_CR1_OFFSET) /* Control Registry 1 */
+#define rCR2		REG(STM32_GTIM_CR2_OFFSET) /* Control Registry 2 */
+#define rSMCR		REG(STM32_GTIM_SMCR_OFFSET) /* Slave mode control registery 1*/
+#define rDIER		REG(STM32_GTIM_DIER_OFFSET) /* DMA/Interrupt enable register */
+#define rSR		REG(STM32_GTIM_SR_OFFSET) /* Status Register */
+#define rEGR		REG(STM32_GTIM_EGR_OFFSET) /* Event Generation register */
+#define rCCMR1		REG(STM32_GTIM_CCMR1_OFFSET) /* Capture/compare mode register */
 #define rCCMR2		REG(STM32_GTIM_CCMR2_OFFSET)
-#define rCCER		REG(STM32_GTIM_CCER_OFFSET)
-#define rCNT		REG(STM32_GTIM_CNT_OFFSET)
-#define rPSC		REG(STM32_GTIM_PSC_OFFSET)
-#define rARR		REG(STM32_GTIM_ARR_OFFSET)
-#define rCCR1		REG(STM32_GTIM_CCR1_OFFSET)
+#define rCCER		REG(STM32_GTIM_CCER_OFFSET) /* Capture/compare enable register */
+#define rCNT		REG(STM32_GTIM_CNT_OFFSET) /* Counter */
+#define rPSC		REG(STM32_GTIM_PSC_OFFSET) /* Pre-scaler */
+#define rARR		REG(STM32_GTIM_ARR_OFFSET) /* auto-reload register */
+#define rCCR1		REG(STM32_GTIM_CCR1_OFFSET) /* Capture/compare register */
 #define rCCR2		REG(STM32_GTIM_CCR2_OFFSET)
 #define rCCR3		REG(STM32_GTIM_CCR3_OFFSET)
 #define rCCR4		REG(STM32_GTIM_CCR4_OFFSET)
-#define rDCR		REG(STM32_GTIM_DCR_OFFSET)
-#define rDMAR		REG(STM32_GTIM_DMAR_OFFSET)
+#define rDCR		REG(STM32_GTIM_DCR_OFFSET) /* DMA control register */
+#define rDMAR		REG(STM32_GTIM_DMAR_OFFSET) /* DMA address fir burst mode */
 
 /*
  * Specific registers and bits used by HRT sub-functions
  */
 #if PWMIN_TIMER_CHANNEL == 1
+#define rCR2_PWMIN		0 /* Control register 2 */
 #define rCCR_PWMIN_A		rCCR1			/* compare register for PWMIN */
 #define DIER_PWMIN_A		(GTIM_DIER_CC1IE) 	/* interrupt enable for PWMIN */
-#define SR_INT_PWMIN_A		GTIM_SR_CC1IF		/* interrupt status for PWMIN */
+//#define SR_INT_PWMIN_A		GTIM_SR_CC1IF		/* interrupt status for PWMIN */
 #define rCCR_PWMIN_B		rCCR2 			/* compare register for PWMIN */
-#define SR_INT_PWMIN_B		GTIM_SR_CC2IF		/* interrupt status for PWMIN */
+//#define SR_INT_PWMIN_B		GTIM_SR_CC2IF		/* interrupt status for PWMIN */
 #define CCMR1_PWMIN		((0x02 << GTIM_CCMR1_CC2S_SHIFT) | (0x01 << GTIM_CCMR1_CC1S_SHIFT))
 #define CCMR2_PWMIN		0
 #define CCER_PWMIN		(GTIM_CCER_CC2P | GTIM_CCER_CC1E | GTIM_CCER_CC2E)
 #define SR_OVF_PWMIN		(GTIM_SR_CC1OF | GTIM_SR_CC2OF)
-#define SMCR_PWMIN_1		(0x05 << GTIM_SMCR_TS_SHIFT)
+#define SMCR_PWMIN_1		(0x05 << GTIM_SMCR_TS_SHIFT) /* TI1FP1 as trigger selection */
 #define SMCR_PWMIN_2		((0x04 << GTIM_SMCR_SMS_SHIFT) | SMCR_PWMIN_1)
 #elif PWMIN_TIMER_CHANNEL == 2
+#define rCR2_PWMIN		0 /* Control register 2 */
 #define rCCR_PWMIN_A		rCCR2			/* compare register for PWMIN */
-#define DIER_PWMIN_A		(GTIM_DIER_CC2IE)	/* interrupt enable for PWMIN */
-#define SR_INT_PWMIN_A		GTIM_SR_CC2IF		/* interrupt status for PWMIN */
+#define DIER_PWMIN_A		(GTIM_DIER_CC2IE)	/* interrupt enable for PWMIN */ /* bit 2*/
+//#define SR_INT_PWMIN_A		GTIM_SR_CC2IF		/* interrupt status for PWMIN */
 #define rCCR_PWMIN_B		rCCR1			/* compare register for PWMIN */
-#define DIER_PWMIN_B		GTIM_DIER_CC1IE		/* interrupt enable for PWMIN */
-#define SR_INT_PWMIN_B		GTIM_SR_CC1IF		/* interrupt status for PWMIN */
-#define CCMR1_PWMIN		((0x01 << GTIM_CCMR1_CC2S_SHIFT) | (0x02 << GTIM_CCMR1_CC1S_SHIFT))
+//#define DIER_PWMIN_B		GTIM_DIER_CC1IE		/* interrupt enable for PWMIN */ /* bit 1 */
+//#define SR_INT_PWMIN_B		GTIM_SR_CC1IF		/* interrupt status for PWMIN */ /* bit 1 */
+#define CCMR1_PWMIN		((0x01 << GTIM_CCMR1_CC2S_SHIFT) | (0x02 << GTIM_CCMR1_CC1S_SHIFT)) /* CC2 channel is configured as input, IC2 is mapped on TI2 and : CC1 channel is configured as input, IC1 is mapped on TI2 */
 #define CCMR2_PWMIN		0
-#define CCER_PWMIN		(GTIM_CCER_CC1P | GTIM_CCER_CC1E | GTIM_CCER_CC2E)
-#define SR_OVF_PWMIN		(GTIM_SR_CC1OF | GTIM_SR_CC2OF)
-#define SMCR_PWMIN_1		(0x06 << GTIM_SMCR_TS_SHIFT)
-#define SMCR_PWMIN_2		((0x04 << GTIM_SMCR_SMS_SHIFT) | SMCR_PWMIN_1)
+#define CCER_PWMIN		(GTIM_CCER_CC1P | GTIM_CCER_CC1E | GTIM_CCER_CC2E) /* Edge polarity | Enable | Enable*/
+#define SR_OVF_PWMIN		(GTIM_SR_CC1OF | GTIM_SR_CC2OF) /* Overcapture (missed edge) */
+#define SMCR_PWMIN_1		(0x06 << GTIM_SMCR_TS_SHIFT) /* GTIM_SMCR_TI2FP2 as trigger selection */
+#define SMCR_PWMIN_2		((0x04 << GTIM_SMCR_SMS_SHIFT) | SMCR_PWMIN_1) /* GTIM_SMCR_RESET Reset Mode - Rising edge of the selected trigger input (TRGI) reinitializes the counter and generates an update of the registers. */
+#elif PWMIN_TIMER_CHANNEL == 3
+#define rCR2_PWMIN		(GTIM_CR2_TI1S) /* Control register 2 */
+#define rCCR_PWMIN_A		rCCR3			/* compare register for PWMIN */
+#define DIER_PWMIN_A		(GTIM_DIER_CC3IE)	/* interrupt enable for PWMIN */ /* bit 2*/
+//#define SR_INT_PWMIN_A		GTIM_SR_CC2IF		/* interrupt status for PWMIN */
+#define rCCR_PWMIN_B		rCCR4			/* compare register for PWMIN */
+//#define DIER_PWMIN_B		GTIM_DIER_CC1IE		/* interrupt enable for PWMIN */ /* bit 1 */
+//#define SR_INT_PWMIN_B		GTIM_SR_CC1IF		/* interrupt status for PWMIN */ /* bit 1 */
+#define CCMR1_PWMIN		0
+#define CCMR2_PWMIN		((0x01 << GTIM_CCMR2_CC3S_SHIFT) | (0x02 << GTIM_CCMR2_CC4S_SHIFT)) /* CC3 channel is configured as input, IC3 is mapped on TI3 and CC4 channel is configured as input, IC4 is mapped on TI3 */
+#define CCER_PWMIN		(GTIM_CCER_CC4P | GTIM_CCER_CC3E | GTIM_CCER_CC4E) /* Edge polarity | Enable | Enable*/
+#define SR_OVF_PWMIN		(GTIM_SR_CC3OF | GTIM_SR_CC4OF) /* Overcapture (missed edge) */
+#define SMCR_PWMIN_1		(0x05 << GTIM_SMCR_TS_SHIFT) /* TI1FP1 as trigger selection */
+#define SMCR_PWMIN_2		((0x04 << GTIM_SMCR_SMS_SHIFT) | SMCR_PWMIN_1) /* GTIM_SMCR_RESET Reset Mode - Rising edge of the selected trigger input (TRGI) reinitializes the counter and generates an update of the registers. */
 #else
-#error PWMIN_TIMER_CHANNEL must be either 1 and 2.
+#error PWMIN_TIMER_CHANNEL must be either 1, 2 or 3.
 #endif
 
 class PWMIN : public ModuleBase<PWMIN>
