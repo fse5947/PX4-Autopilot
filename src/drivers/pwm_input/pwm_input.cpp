@@ -100,12 +100,12 @@ PWMIN::timer_init(void)
 
 	/* disable and configure the timer */
 	rCR1 = 0;
-	rCR2 = 0;
+	rCR2 = rCR2_PWMIN;
 	rSMCR = 0;
 	rDIER = DIER_PWMIN_A;
 	rCCER = 0;		/* unlock CCMR* registers */
-	rCCMR1 = CCMR1_PWMIN;
-	rCCMR2 = CCMR2_PWMIN;
+	rCCMR1 = CCMR1_PWMIN;  /* Capture/Compare Register 1 */
+	rCCMR2 = CCMR2_PWMIN; /* Capture/Compare Register 2 */
 	rSMCR = SMCR_PWMIN_1;	/* Set up mode */
 	rSMCR = SMCR_PWMIN_2;	/* Enable slave mode controller */
 	rCCER = CCER_PWMIN;
