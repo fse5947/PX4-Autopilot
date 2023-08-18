@@ -1,0 +1,5 @@
+menuconfig DRIVERS_RPM_HOLYBRO_RPM
+	bool "holybro_rpm"
+	default n
+	---help---
+		Enable support for holybro_rpm

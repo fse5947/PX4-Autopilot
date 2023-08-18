@@ -1,7 +1,10 @@
-menuconfig DRIVERS_RPM
-	bool "rpm"
-	default n
-	---help---
-		Enable support for rpm
+menu "RPM sensors"
+    menuconfig COMMON_DRIVERS_RPM
+        bool "Common RPM Drivers"
+        default n
+        select DRIVERS_RPM_HOLYBRO_RPM
+        ---help---
+            Enable default set of RPM sensor drivers
 
-rsource "*/Kconfig"
+    rsource "*/Kconfig"
+endmenu

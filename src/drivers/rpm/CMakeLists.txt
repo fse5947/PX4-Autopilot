@@ -1,1 +1,1 @@
-add_subdirectory(pcf8583)
+add_subdirectory(holybro_rpm)

@@ -28,6 +28,15 @@ then
 	fi
 fi
 
+# Holybro RPM sensor on PWM
+if param compare -s SENS_EN_HOLYBRO 1
+then
+	if pwm_input start
+	then
+		holybro_rpm start
+	fi
+fi
+
 # External automatic trigger system
 if param compare FD_EXT_ATS_EN 1
 then
