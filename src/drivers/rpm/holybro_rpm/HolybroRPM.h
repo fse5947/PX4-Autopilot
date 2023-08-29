@@ -81,7 +81,10 @@ private:
 	double convert(double value) const;
 	uint32_t get_measure_interval() const { return HOLYBRORPM_CONVERSION_INTERVAL; };
 	int32_t _num_poles{2};
+	int32_t _min_rpm{100};
 	double _min_period{0};
+
+	double _cummulative_period{0};
 
 	uORB::Subscription _sub_pwm_input{ORB_ID(pwm_input)};
 	uORB::PublicationMulti<rpm_s> _rpm_pub{ORB_ID(rpm)};
