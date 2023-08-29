@@ -34,7 +34,7 @@
 
 /**
  * @file HolybroRPM.h
- * @author Brendan Patience <brendan.patience@mail.mcgill.ca>
+ * @author Brendan Patience <brendan.patience@shearwater.ai>
  *
  * Driver for the Holybro RPM sensor connected via PWM.
  *
@@ -57,9 +57,6 @@ using namespace time_literals;
 // Normal conversion wait time.
 static constexpr uint32_t HOLYBRORPM_CONVERSION_INTERVAL{50_ms};
 
-// Maximum time to wait for a conversion to complete.
-static constexpr uint32_t HOLYBRORPM_CONVERSION_TIMEOUT{100_ms};
-
 class HolybroRPM : public px4::ScheduledWorkItem
 {
 public:
@@ -81,8 +78,10 @@ protected:
 
 private:
 
+	double convert(double value) const;
 	uint32_t get_measure_interval() const { return HOLYBRORPM_CONVERSION_INTERVAL; };
 	int32_t _num_poles{2};
+	double _min_period{0};
 
 	uORB::Subscription _sub_pwm_input{ORB_ID(pwm_input)};
 	uORB::PublicationMulti<rpm_s> _rpm_pub{ORB_ID(rpm)};

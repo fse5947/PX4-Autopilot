@@ -34,7 +34,7 @@
 
 /**
  * @file HolybroRPM.h
- * @author Brendan Patience <brendan.patience@mail.mcgill.ca>
+ * @author Brendan Patience <brendan.patience@shearwater.ai>
  *
  * Driver for the Holybro RPM sensor connected via PWM.
  *
@@ -49,6 +49,13 @@ HolybroRPM::HolybroRPM() :
 	ScheduledWorkItem(MODULE_NAME, px4::wq_configurations::hp_default)
 {
 	param_get(param_find("SENS_NUM_POLES"), &_num_poles);
+
+	float max_rpm = 0.0;
+	param_get(param_find("SENS_MAX_RPM"), &max_rpm);
+
+	_min_period = convert(max_rpm);
+
+	PX4_INFO("Minimum Period set at %f", _min_period);
 
 }
 
@@ -83,6 +90,18 @@ HolybroRPM::Run()
 	measure();
 }
 
+
+double
+HolybroRPM::convert(double value) const {
+
+	if (value < DBL_EPSILON)
+	{
+		return INFINITY;
+	}
+
+	return 2*60*1e6 / (value * _num_poles);
+}
+
 int
 HolybroRPM::measure()
 {
@@ -92,15 +111,12 @@ HolybroRPM::measure()
 		return PX4_ERROR;
 	}
 
-	double period = _pwm.period;
-	if (period < DBL_EPSILON) {
-		measured_rpm.indicated_frequency_rpm = NAN;
-	} else {
-		measured_rpm.indicated_frequency_rpm = 2*60*1e6 / (period*_num_poles);
-	}
+	if (_pwm.period > _min_period) {
+		measured_rpm.indicated_frequency_rpm = convert(_pwm.period);
 
-	measured_rpm.timestamp = hrt_absolute_time();
-	_rpm_pub.publish(measured_rpm);
+		measured_rpm.timestamp = hrt_absolute_time();
+		_rpm_pub.publish(measured_rpm);
+	}
 
 	return PX4_OK;
 }

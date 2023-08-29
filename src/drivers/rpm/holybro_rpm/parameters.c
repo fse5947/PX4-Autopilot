@@ -53,3 +53,15 @@ PARAM_DEFINE_INT32(SENS_EN_HOLYBRO, 0);
  * @increment 2
  */
 PARAM_DEFINE_INT32(SENS_NUM_POLES, 2);
+
+
+/**
+ * Maximum RPM (HOLYBRORPM)
+ *
+ * @reboot_required true
+ * @min 1000
+ * @max 50000
+ * @group Sensors
+ * @increment 1
+ */
+PARAM_DEFINE_INT32(SENS_MAX_RPM, 10000);

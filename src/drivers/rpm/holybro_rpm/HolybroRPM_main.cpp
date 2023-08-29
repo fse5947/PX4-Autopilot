@@ -33,7 +33,7 @@
 
 /**
  * @file HolybroRPM_main.cpp
- * @author Brendan Patience <brendan.patience@mail.mcgill.ca>
+ * @author Brendan Patience <brendan.patience@shearwater.ai>
  */
 
 #include <cstdlib>
