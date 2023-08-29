@@ -52,7 +52,7 @@ HolybroRPM::HolybroRPM() :
 
 	int32_t max_rpm = 0;
 	param_get(param_find("SENS_MAX_RPM"), &max_rpm);
-	_min_period = convert(static_cast<double>(max_rpm));
+	_min_period = convert(max_rpm);
 	PX4_INFO("Minimum Period set at %f", _min_period);
 
 
@@ -94,10 +94,10 @@ HolybroRPM::Run()
 }
 
 
-double
-HolybroRPM::convert(double value) const {
+float
+HolybroRPM::convert(int value) const {
 
-	if (value < DBL_EPSILON)
+	if (value == 0)
 	{
 		return INFINITY;
 	}
@@ -114,18 +114,21 @@ HolybroRPM::measure()
 		return PX4_ERROR;
 	}
 
-	_cummulative_period += _pwm.period;
+	if (_pwm.period > 0)
+	{
+		_cummulative_period += _pwm.period;
 
-	if (_pwm.period < _min_period) {
-		return PX4_OK;
+		if (_cummulative_period < _min_period) {
+			return PX4_OK;
+		}
 	}
 
 	rpm_s measured_rpm{};
 	measured_rpm.timestamp = hrt_absolute_time();
 
-	float indicated_frequency_rpm = static_cast<float>(convert(_cummulative_period));
+	float indicated_frequency_rpm = convert(_cummulative_period);
 	measured_rpm.indicated_frequency_rpm = indicated_frequency_rpm;
-	measured_rpm.estimated_accurancy_rpm = static_cast<float>(indicated_frequency_rpm > _min_rpm) * indicated_frequency_rpm;
+	measured_rpm.estimated_accurancy_rpm = (indicated_frequency_rpm > _min_rpm) * indicated_frequency_rpm;
 	_rpm_pub.publish(measured_rpm);
 
 	_cummulative_period = 0.0;
