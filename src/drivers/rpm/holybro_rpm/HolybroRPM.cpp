@@ -127,8 +127,8 @@ HolybroRPM::measure()
 	measured_rpm.timestamp = hrt_absolute_time();
 
 	float indicated_frequency_rpm = convert(_cummulative_period);
-	measured_rpm.indicated_frequency_rpm = indicated_frequency_rpm;
-	measured_rpm.estimated_accurancy_rpm = (indicated_frequency_rpm > _min_rpm) * indicated_frequency_rpm;
+	measured_rpm.estimated_accurancy_rpm = indicated_frequency_rpm;
+	measured_rpm.indicated_frequency_rpm = (indicated_frequency_rpm > _min_rpm) * indicated_frequency_rpm;
 	_rpm_pub.publish(measured_rpm);
 
 	_cummulative_period = 0.0;
