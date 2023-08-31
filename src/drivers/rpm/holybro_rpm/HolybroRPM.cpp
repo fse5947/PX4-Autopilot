@@ -121,6 +121,8 @@ HolybroRPM::measure()
 		if (_cummulative_period < _min_period) {
 			return PX4_OK;
 		}
+	} else {
+		_cummulative_period = 0.0;
 	}
 
 	rpm_s measured_rpm{};
