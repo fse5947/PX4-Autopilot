@@ -84,7 +84,7 @@ private:
 	int32_t _min_rpm{100};
 	double _min_period{0.0};
 
-	int _cummulative_period{0};
+	int _count{0};
 
 	uORB::Subscription _sub_pwm_input{ORB_ID(pwm_input)};
 	uORB::PublicationMulti<rpm_s> _rpm_pub{ORB_ID(rpm)};
