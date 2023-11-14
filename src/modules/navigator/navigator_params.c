@@ -217,7 +217,7 @@ PARAM_DEFINE_INT32(AA_GLIDE_EN, 0);
  * @boolean
  * @group Mission
  */
-PARAM_DEFINE_INT32(AA_GLIDE_THR_EN, 0);
+PARAM_DEFINE_INT32(NAV_GLIDE_THR_EN, 0);
 
 /**
  * Glide Throttle Setting

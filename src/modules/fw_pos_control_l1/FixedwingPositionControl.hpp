@@ -537,7 +537,7 @@ private:
 
 		(ParamBool<px4::params::AA_GLIDE_EN>) _param_AA_GLIDE_EN,
 
-		(ParamBool<px4::params::AA_GLIDE_THR_EN>) _param_AA_GLIDE_THROTTLE_EN,
+		(ParamBool<px4::params::NAV_GLIDE_THR_EN>) _param_NAV_GLIDE_THROTTLE_EN,
 
 		(ParamFloat<px4::params::NAV_FW_GLIDE_THR>) _param_nav_fw_glide_thr,
 
