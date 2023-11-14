@@ -322,6 +322,7 @@ void TECS::_update_throttle_setpoint(const float throttle_cruise)
 
 			} else {
 				_throttle_integ_state = 0.0f;
+				throttle_setpoint = constrain(throttle_cruise, _throttle_setpoint_min, _throttle_setpoint_max);
 			}
 
 		}
