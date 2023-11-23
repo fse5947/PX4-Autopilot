@@ -50,9 +50,8 @@ HolybroRPM::HolybroRPM() :
 {
 	param_get(param_find("SENS_NUM_POLES"), &_num_poles);
 
-	int32_t max_rpm = 0;
-	param_get(param_find("SENS_MAX_RPM"), &max_rpm);
-	_min_period = convert(max_rpm);
+	param_get(param_find("SENS_MAX_RPM"), &_max_rpm);
+	_min_period = convert(_max_rpm);
 	PX4_INFO("Minimum Period set at %f", _min_period);
 
 
@@ -122,6 +121,7 @@ HolybroRPM::measure()
 	measured_rpm.timestamp = hrt_absolute_time();
 
 	float indicated_frequency_rpm = (_count <= 10) ? convert(_pwm.period) : 0.0f;
+	indicated_frequency_rpm = (indicated_frequency_rpm >= _max_rpm) ? indicated_frequency_rpm : float(_max_rpm);
 	measured_rpm.estimated_accurancy_rpm = indicated_frequency_rpm;
 	measured_rpm.indicated_frequency_rpm = (indicated_frequency_rpm > _min_rpm) * indicated_frequency_rpm;
 	_rpm_pub.publish(measured_rpm);

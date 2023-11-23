@@ -83,6 +83,7 @@ private:
 	int32_t _num_poles{2};
 	int32_t _min_rpm{100};
 	double _min_period{0.0};
+	int32_t _max_rpm{20000};
 
 	int _count{0};
 
