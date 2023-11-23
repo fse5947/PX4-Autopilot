@@ -1199,6 +1199,10 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 		_glide_throttle_enabled = false;
 	}
 
+	if (!param_glide_throttle_en) {
+		_glide_throttle_enabled = false;
+	}
+
 	// Reset Roll integral if we just came out of a loiter
 	if (prev_climbout_loiter && !_do_climbout_loiter){
 		_att_sp.roll_reset_integral = true;
@@ -1455,6 +1459,10 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 		_glide_enabled = false;
 		_glide_throttle_enabled = false;
 		_do_glide_climbout = false;
+	}
+
+	if (!param_glide_throttle_en) {
+		_glide_throttle_enabled = false;
 	}
 
 	if (PX4_ISFINITE(pos_sp_curr.cruising_throttle) &&
