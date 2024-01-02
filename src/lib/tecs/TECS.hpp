@@ -314,6 +314,7 @@ private:
 	// glideing variables
 	bool _glide_enabled{false};
 	bool _prev_glide_enable{false};
+	bool _glide_throttle_enabled{false};
 
 	/**
 	 * Update the airspeed internal state using a second order complementary filter

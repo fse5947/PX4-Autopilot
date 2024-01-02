@@ -210,6 +210,29 @@ PARAM_DEFINE_INT32(NAV_FORCE_VT, 1);
 PARAM_DEFINE_INT32(AA_GLIDE_EN, 0);
 
 /**
+ * Soaring Throttle Enabled
+ *
+ * This parameter allows us to enable gliding flight in auto mode
+ *
+ * @boolean
+ * @group Mission
+ */
+PARAM_DEFINE_INT32(NAV_GLIDE_THR_EN, 0);
+
+/**
+ * Glide Throttle Setting
+ *
+ * Minimum altitude in soaring state at which the motor will turn back on and the aircraft will climb in altitude
+ *
+ * @min 5.0
+ * @max 25.0
+ * @decimal 1
+ * @increment 1.0
+ * @group Mission
+ */
+PARAM_DEFINE_FLOAT(NAV_FW_GLIDE_THR, 10.0f);
+
+/**
  * Minimum Soaring Altitude
  *
  * Minimum altitude in soaring state at which the motor will turn back on and the aircraft will climb in altitude

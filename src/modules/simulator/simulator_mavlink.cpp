@@ -405,6 +405,9 @@ void Simulator::handle_message(const mavlink_message_t *msg)
 	case MAVLINK_MSG_ID_WIND_COV:
 		handle_message_wind_groundtruth_status(msg);
 		break;
+
+	case MAVLINK_MSG_ID_RAW_RPM:
+		handle_message_raw_rpm(msg);
 	}
 }
 
@@ -750,6 +753,20 @@ Simulator::handle_message_wind_groundtruth_status(const mavlink_message_t *msg)
 	wind.windspeed_down = wind_mavlink.wind_z;
 
 	_wind_groundtruth_pub.publish(wind);
+}
+
+void Simulator::handle_message_raw_rpm(const mavlink_message_t *msg)
+{
+	// external battery measurements
+	mavlink_raw_rpm_t rpm_mavlink;
+	mavlink_msg_raw_rpm_decode(msg, &rpm_mavlink);
+
+	rpm_s rpm{};
+
+	rpm.timestamp = hrt_absolute_time();
+	rpm.indicated_frequency_rpm = rpm_mavlink.frequency;
+
+	_rpm_pub.publish(rpm);
 }
 
 void Simulator::send_mavlink_message(const mavlink_message_t &aMsg)

@@ -75,6 +75,7 @@
 #include <uORB/topics/vehicle_command_ack.h>
 #include <uORB/topics/battery_status.h>
 #include <uORB/topics/wind.h>
+#include <uORB/topics/rpm.h>
 
 #include <random>
 
@@ -229,6 +230,7 @@ private:
 	void handle_message_vision_position_estimate(const mavlink_message_t *msg);
 	void handle_message_battery_status(const mavlink_message_t *msg);
 	void handle_message_wind_groundtruth_status(const mavlink_message_t *msg);
+	void handle_message_raw_rpm(const mavlink_message_t *msg);
 
 	void parameters_update(bool force);
 	void poll_for_MAVLink_messages();
@@ -252,6 +254,7 @@ private:
 	uORB::Publication<input_rc_s>			_input_rc_pub{ORB_ID(input_rc)};
 	uORB::Publication<battery_status_s>		_battery_pub{ORB_ID(battery_status)};
 	uORB::Publication<wind_s>			_wind_groundtruth_pub{ORB_ID(wind_groundtruth)};
+	uORB::Publication<rpm_s>			_rpm_pub{ORB_ID(rpm)};
 
 	// HIL GPS
 	static constexpr int MAX_GPS = 3;

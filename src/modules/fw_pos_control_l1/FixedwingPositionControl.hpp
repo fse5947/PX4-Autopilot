@@ -208,6 +208,7 @@ private:
 
 	/* Gliding */
 	bool _glide_enabled{false};
+	bool _glide_throttle_enabled{false};
 	bool _do_glide_climbout{false};
 	bool _do_climbout_loiter{false};
 	Vector2f _glide_climbout_wp_local {};
@@ -535,6 +536,10 @@ private:
 		(ParamFloat<px4::params::NAV_FW_ALT_RAD>) _param_nav_fw_alt_rad,
 
 		(ParamBool<px4::params::AA_GLIDE_EN>) _param_AA_GLIDE_EN,
+
+		(ParamBool<px4::params::NAV_GLIDE_THR_EN>) _param_NAV_GLIDE_THROTTLE_EN,
+
+		(ParamFloat<px4::params::NAV_FW_GLIDE_THR>) _param_nav_fw_glide_thr,
 
 		(ParamFloat<px4::params::NAV_FW_GLIDE_MIN>) _param_nav_fw_glide_min,
 

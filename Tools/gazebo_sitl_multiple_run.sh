@@ -18,9 +18,9 @@ function spawn_model() {
 	X=$3
 	Y=$4
 	X=${X:=0.0}
-	Y=${Y:=$((3*${N}))}
+	Y=${Y:=$((5*${N}))}
 
-	SUPPORTED_MODELS=("iris" "plane" "standard_vtol" "rover" "r1_rover" "typhoon_h480")
+	SUPPORTED_MODELS=("iris" "plane" "standard_vtol" "rover" "r1_rover" "typhoon_h480" "phoenix2400")
 	if [[ " ${SUPPORTED_MODELS[*]} " != *"$MODEL"* ]];
 	then
 		echo "ERROR: Currently only vehicle model $MODEL is not supported!"
@@ -52,7 +52,7 @@ then
 	exit 1
 fi
 
-while getopts n:m:w:s:t:l: option
+while getopts n:m:w:s:t:l:h: option
 do
 	case "${option}"
 	in
@@ -62,6 +62,7 @@ do
 		s) SCRIPT=${OPTARG};;
 		t) TARGET=${OPTARG};;
 		l) LABEL=_${OPTARG};;
+		h) HEADLESS=${OPTARG};;
 	esac
 done
 
@@ -70,6 +71,7 @@ world=${WORLD:=empty}
 target=${TARGET:=px4_sitl_default}
 vehicle_model=${VEHICLE_MODEL:="iris"}
 export PX4_SIM_MODEL=${vehicle_model}
+headless=${HEADLESS:=0}
 
 echo ${SCRIPT}
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -134,7 +136,12 @@ else
 	done
 
 fi
-trap "cleanup" SIGINT SIGTERM EXIT
 
-echo "Starting gazebo client"
-gzclient
+if [[ ${headless} == "1" ]]; then
+	echo "not running gazebo gui"
+else
+	trap "cleanup" SIGINT SIGTERM EXIT
+
+	echo "Starting gazebo client"
+	gzclient
+fi

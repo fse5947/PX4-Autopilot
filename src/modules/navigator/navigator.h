@@ -453,6 +453,8 @@ private:
 		(ParamFloat<px4::params::NAV_TRAFF_A_RADU>) _param_nav_traff_a_radu,	/**< avoidance Distance Unmanned*/
 		(ParamFloat<px4::params::NAV_TRAFF_A_RADM>) _param_nav_traff_a_radm,	/**< avoidance Distance Manned*/
 		(ParamBool<px4::params::AA_GLIDE_EN>)   _param_AA_GLIDE_EN,	/**< enable gliding*/
+		(ParamBool<px4::params::NAV_GLIDE_THR_EN>)   _param_NAV_GLIDE_THROTTLE_EN,
+
 		// (ParamFloat<px4::params::NAV_FW_GLIDE_MIN>)   _param_nav_fw_glide_min,	/**< minimum glide altitude*/
 		// (ParamFloat<px4::params::NAV_FW_GLIDE_CLB>)   _param_nav_fw_glide_climb,	/**< gliding climbout altitude*/
 		// (ParamFloat<px4::params::NAV_FW_GLIDE_ACC>)   _param_nav_fw_glide_acc,	/**< gliding climbout altitude acceptance*/
