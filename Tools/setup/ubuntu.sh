@@ -67,6 +67,8 @@ elif [[ "${UBUNTU_RELEASE}" == "18.04" ]]; then
 	echo "Ubuntu 18.04"
 elif [[ "${UBUNTU_RELEASE}" == "20.04" ]]; then
 	echo "Ubuntu 20.04"
+elif [[ "${UBUNTU_RELEASE}" == "22.04" ]]; then
+	echo "Ubuntu 22.04"
 fi
 
 
@@ -85,6 +87,7 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get -y --quiet --no-install-recommends i
 	gdb \
 	git \
 	lcov \
+	libfuse2 \
 	libxml2-dev \
 	libxml2-utils \
 	make \
@@ -146,7 +149,7 @@ if [[ $INSTALL_NUTTX == "true" ]]; then
 		util-linux \
 		vim-common \
 		;
-	if [[ "${UBUNTU_RELEASE}" == "20.04" ]]; then
+	if [[ "${UBUNTU_RELEASE}" == "20.04" || "${UBUNTU_RELEASE}" == "22.04" ]]; then
 		sudo DEBIAN_FRONTEND=noninteractive apt-get -y --quiet --no-install-recommends install \
 		kconfig-frontends \
 		;
@@ -165,7 +168,7 @@ if [[ $INSTALL_NUTTX == "true" ]]; then
 	source $HOME/.profile # load changed path for the case the script is reran before relogin
 	if [ $(which arm-none-eabi-gcc) ]; then
 		GCC_VER_STR=$(arm-none-eabi-gcc --version)
-		GCC_FOUND_VER=$(echo $GCC_VER_STR | grep -c "${NUTTX_GCC_VERSION}")
+		GCC_FOUND_VER=$(echo $GCC_VER_STR | grep -c "${NUTTX_GCC_VERSION}" || true)
 	fi
 
 	if [[ "$GCC_FOUND_VER" == "1" ]]; then
@@ -183,6 +186,7 @@ if [[ $INSTALL_NUTTX == "true" ]]; then
 			echo "${NUTTX_GCC_VERSION} path already set.";
 		else
 			echo $exportline >> $HOME/.profile;
+			source $HOME/.profile; # Allows to directly build NuttX targets in the same terminal
 		fi
 	fi
 fi
@@ -203,6 +207,9 @@ if [[ $INSTALL_SIM == "true" ]]; then
 		gazebo_version=9
 	elif [[ "${UBUNTU_RELEASE}" == "20.04" ]]; then
 		java_version=13
+		gazebo_version=11
+	elif [[ "${UBUNTU_RELEASE}" == "22.04" ]]; then
+		java_version=11
 		gazebo_version=11
 	else
 		java_version=14
