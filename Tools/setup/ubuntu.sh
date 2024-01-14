@@ -242,7 +242,7 @@ if [[ $INSTALL_SIM == "true" ]]; then
 		libeigen3-dev \
 		libboost-thread-dev \
 		libboost-filesystem-dev \
-		libgstreamer1.0-dev
+		libgstreamer1.0-dev \
 		libgazebo$gazebo_version-dev \
 		libgstreamer-plugins-base1.0-dev \
 		libimage-exiftool-perl \
