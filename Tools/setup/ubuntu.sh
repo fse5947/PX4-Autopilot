@@ -210,7 +210,7 @@ if [[ $INSTALL_SIM == "true" ]]; then
 		gazebo_version=11
 	elif [[ "${UBUNTU_RELEASE}" == "22.04" ]]; then
 		java_version=11
-		gazebo_version=11
+		gazebo_version=''
 	else
 		java_version=14
 		gazebo_version=11
@@ -240,6 +240,9 @@ if [[ $INSTALL_SIM == "true" ]]; then
 		gstreamer1.0-plugins-ugly \
 		gstreamer1.0-libav \
 		libeigen3-dev \
+		libboost-thread-dev \
+		libboost-filesystem-dev \
+		libgstreamer1.0-dev
 		libgazebo$gazebo_version-dev \
 		libgstreamer-plugins-base1.0-dev \
 		libimage-exiftool-perl \
