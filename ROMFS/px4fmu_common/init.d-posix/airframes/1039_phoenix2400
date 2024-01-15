@@ -32,6 +32,7 @@ param set-default MIS_DIST_WPS 5000.0
 # Gliding
 param set-default NAV_FW_GLIDE_ACC 10.0
 param set-default NAV_FW_GLIDE_CLB -1.0
+param set-default RTL_TYPE 0
 
 # Autotuned params
 param set-default FW_PR_FF 0.1294
