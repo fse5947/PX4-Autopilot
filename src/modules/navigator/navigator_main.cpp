@@ -509,7 +509,7 @@ void Navigator::run()
 					// set_cruising_speed(); DONT WANT TO RESET CRUISE SPEED IF THROTTLE IS COMMAND PROVIDED.
 
 					/* if no speed target was given try to set throttle */
-					if (cmd.param3 > FLT_EPSILON) {
+					if (cmd.param3 >= 0.0f) {
 						set_cruising_throttle(cmd.param3 / 100);
 
 					} else {
@@ -1146,7 +1146,7 @@ void Navigator::reset_position_setpoint(position_setpoint_s &sp)
 float Navigator::get_cruising_throttle()
 {
 	/* Return the mission-requested cruise speed, or default FW_THR_CRUISE value */
-	if (_mission_throttle > FLT_EPSILON) {
+	if (_mission_throttle >= 0.0f) {
 		return _mission_throttle;
 
 	} else {
