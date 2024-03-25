@@ -1218,7 +1218,7 @@ FixedwingPositionControl::control_auto_position(const hrt_abstime &now, const fl
 		_tecs.set_speed_weight(2.0f);
 		tecs_fw_thr_min = _glide_throttle_enabled ? _param_fw_thr_min.get() : 0.0f;
 		tecs_fw_thr_max = _glide_throttle_enabled ? _param_fw_thr_max.get() : 0.0f;
-		tecs_fw_mission_throttle = _glide_throttle_enabled ? _param_nav_fw_glide_thr.get() / 100.0f : 0.0f;
+		tecs_fw_mission_throttle = _glide_throttle_enabled ? mission_throttle : 0.0f;
 
 	} else {
 		_tecs.set_speed_weight(1.0f);
@@ -1475,7 +1475,7 @@ FixedwingPositionControl::control_auto_loiter(const hrt_abstime &now, const floa
 		_tecs.set_speed_weight(2.0f);
 		tecs_fw_thr_min = _param_fw_thr_min.get();
 		tecs_fw_thr_max = _glide_throttle_enabled ? _param_fw_thr_max.get() : 0.0f;
-		tecs_fw_mission_throttle = _glide_throttle_enabled ? _param_nav_fw_glide_thr.get() / 100.0f : 0.0f;
+		tecs_fw_mission_throttle = _glide_throttle_enabled ? mission_throttle : 0.0f;
 
 	} else {
 		_tecs.set_speed_weight(1.0f);

@@ -506,13 +506,15 @@ void Navigator::run()
 					}
 
 				} else {
-					set_cruising_speed();
+					// set_cruising_speed(); DONT WANT TO RESET CRUISE SPEED IF THROTTLE IS COMMAND PROVIDED.
 
 					/* if no speed target was given try to set throttle */
 					if (cmd.param3 > FLT_EPSILON) {
 						set_cruising_throttle(cmd.param3 / 100);
 
 					} else {
+						// RESET BOTH ONLY WHEN NEITHER GIVEN (-1 for both params)
+						set_cruising_speed();
 						set_cruising_throttle();
 					}
 				}
